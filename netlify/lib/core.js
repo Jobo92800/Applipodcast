@@ -90,12 +90,22 @@ export async function urlSignee(chemin, secondes = 7200) {
 
 /** URL d'envoi temporaire, utilisée par l'espace thérapeute. */
 export async function urlEnvoi(chemin) {
+  // L'API Storage n'accepte aucune propriété dans le corps de cette route : le
+  // remplacement se demande par l'en-tête x-upsert. Un { upsert: true } dans le
+  // corps est rejeté par un 400.
   const r = await fetch(`${SUPABASE_URL}/storage/v1/object/upload/sign/${BUCKET}/${chemin}`, {
     method: 'POST',
-    headers: { Authorization: `Bearer ${SERVICE_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ upsert: true }),
+    headers: {
+      Authorization: `Bearer ${SERVICE_KEY}`,
+      'Content-Type': 'application/json',
+      'x-upsert': 'true',
+    },
+    body: JSON.stringify({}),
   });
-  if (!r.ok) throw new Error(`Signature d'envoi refusée pour ${chemin} : ${r.status}`);
+  if (!r.ok) {
+    const detail = (await r.text()).slice(0, 200);
+    throw new Error(`Signature d'envoi refusée pour ${chemin} : ${r.status} ${detail}`);
+  }
   const { url } = await r.json();
   return `${SUPABASE_URL}/storage/v1${url}`;
 }
