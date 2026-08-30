@@ -6,7 +6,7 @@
 
   Correspondance avec les dossiers audio :
     cure 1 mois  -> parcours A -> dossier 1/  ->  6 épisodes
-    cure 3 mois  -> parcours B -> dossier 3/  -> 13 épisodes (le n° 4 manque)
+    cure 3 mois  -> parcours B -> dossier 3/  -> 13 épisodes
     cure 6 mois  -> parcours C -> dossier 6/  -> 24 épisodes
 
   Le fichier audio n'est jamais renseigné ici : il s'attache tout seul au moment
@@ -46,7 +46,7 @@ insert into etapes (parcours_code, numero, titre, duree_min) values
   ('B',  1, 'Introduction — Bienvenue dans votre transformation',              7),
   ('B',  2, 'Semaine 1 — Phase d''attaque : relancer la machine',             12),
   ('B',  3, 'Semaine 2 — Réintégrer avec intelligence',                        7),
-  ('B',  4, 'Semaine 3 — Intégrer les féculents le soir : apaisement & équilibre', 7),
+  ('B',  4, 'Semaine 3 — Intégrer les féculents le soir : apaisement & équilibre', 5),
   ('B',  5, 'Semaine 4 — L''équilibre à vie',                                  5),
   ('B',  6, 'Semaine 5 — Gérer les écarts sans culpabilité',                   8),
   ('B',  7, 'Semaine 6 — Les familles d''aliments : comprendre pour choisir',  11),
@@ -91,13 +91,13 @@ on conflict (parcours_code, numero) do update
 update etapes set sous_titre = null where parcours_code = 'A';
 
 -- ---------------------------------------------------------------------------
--- 4. L'épisode manquant
---    Le fichier « 3 - 3.mp3 » de la cure 3 mois n'existe pas. Une étape sans
---    audio bloquerait définitivement la progression : personne ne pourrait la
---    terminer, donc personne n'atteindrait la suivante. On la met de côté.
---    Dès que le fichier est retrouvé : repasser actif à true, puis le déposer.
+-- 4. Toutes les étapes sont actives
+--    L'épisode « Semaine 3 » de la cure 3 mois avait d'abord été désactivé,
+--    faute de fichier audio. Le fichier a été retrouvé : on la réactive, ce qui
+--    rend aussi ce script correct s'il a déjà été exécuté dans sa version
+--    précédente.
 -- ---------------------------------------------------------------------------
-update etapes set actif = false where parcours_code = 'B' and numero = 4;
+update etapes set actif = true where parcours_code = 'B' and numero = 4;
 
 -- ---------------------------------------------------------------------------
 -- Vérification
