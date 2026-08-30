@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Mon parcours — MAbeautyplus</title>
+<meta name="theme-color" content="#F5FAFA">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mon parcours">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/assets/img/icone-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --aqua:#3BBFBF; --aqua-dark:#2C9C9C; --aqua-soft:#E8F6F6;
+  --rose:#E8318A; --rose-soft:#FDECF4;
+  --bg:#F5FAFA; --card:#FFFFFF; --border:#E2EDED;
+  --ink:#123333; --ink-2:#4A6A6A; --ink-3:#8AA5A5;
+  --r:18px; --r-lg:28px; --r-pill:999px;
+  --shadow:0 10px 30px rgba(18,51,51,.06);
+  --shadow-lg:0 18px 44px rgba(18,51,51,.10);
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:17px; line-height:1.6; font-weight:400;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;font-size:inherit;color:inherit;border:0;background:none;cursor:pointer}
+:focus-visible{outline:3px solid var(--aqua);outline-offset:3px;border-radius:8px}
+
+/* ---------- Cadre application ---------- */
+#app{
+  max-width:480px; margin:0 auto; min-height:100dvh;
+  background:var(--bg); position:relative; overflow-x:hidden;
+  padding-bottom:calc(96px + env(safe-area-inset-bottom));
+}
+@media(min-width:520px){
+  body{background:#EDF5F5;padding:24px 0}
+  #app{min-height:calc(100dvh - 48px);border-radius:32px;box-shadow:var(--shadow-lg);overflow:hidden}
+}
+.screen{display:none;padding:0 22px;animation:fade .5s var(--ease) both}
+.screen.actif{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
+
+/* ---------- Typographie ---------- */
+h1,h2,h3{margin:0;font-weight:600;line-height:1.25;letter-spacing:-.01em}
+h1{font-size:29px}
+h2{font-size:23px}
+h3{font-size:19px}
+.eyebrow{
+  font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--aqua-dark);margin:0 0 8px
+}
+.eyebrow.rose{color:var(--rose)}
+p{margin:0 0 14px}
+.doux{color:var(--ink-2);font-weight:300}
+.mini{font-size:14px;color:var(--ink-3);font-weight:300}
+
+/* ---------- En-tête ---------- */
+.entete{padding:26px 0 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.marque{display:flex;flex-direction:column;line-height:1.1}
+.marque b{font-size:14px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--ink)}
+.marque span{font-size:11px;font-weight:300;letter-spacing:.1em;color:var(--ink-3)}
+.marque i{font-style:normal;color:var(--rose)}
+.pastille{
+  width:44px;height:44px;border-radius:var(--r-pill);
+  background:linear-gradient(135deg,var(--aqua) 0%,var(--rose) 130%);
+  background:linear-gradient(135deg in oklab,var(--aqua) 0%,var(--rose) 130%);
+  color:#fff;display:grid;place-items:center;font-weight:600;font-size:16px;flex:none
+}
+
+/* ---------- Boutons ---------- */
+.btn{
+  text-decoration:none;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:19px 22px;border-radius:var(--r-pill);
+  background:var(--aqua);color:#fff;font-weight:600;font-size:17px;
+  box-shadow:0 10px 24px rgba(59,191,191,.32);
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .25s;
+}
+.btn:active{transform:scale(.98)}
+.btn.rose{background:var(--rose);box-shadow:0 10px 24px rgba(232,49,138,.28)}
+.btn.clair{background:#fff;color:var(--ink);border:1px solid var(--border);box-shadow:var(--shadow)}
+.btn-lien{
+  display:inline-flex;align-items:center;gap:6px;color:var(--aqua-dark);
+  font-weight:500;font-size:15px;padding:10px 0
+}
+
+/* ---------- Cartes ---------- */
+.carte{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:24px;box-shadow:var(--shadow);margin-bottom:16px
+}
+.carte-active{
+  position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#fff 0%,#FCFEFE 100%);
+  border-color:#D6EBEB
+}
+.carte-active::before{
+  content:"";position:absolute;inset:0 auto 0 0;width:5px;
+  background:linear-gradient(180deg,var(--aqua),var(--rose))
+}
+
+/* ---------- Progression ---------- */
+.barre{height:9px;border-radius:var(--r-pill);background:#E4EFEF;overflow:hidden}
+.barre>i{
+  display:block;height:100%;border-radius:var(--r-pill);
+  background:linear-gradient(90deg,var(--aqua),var(--rose));
+  background:linear-gradient(90deg in oklab,var(--aqua),var(--rose));
+  width:0;transition:width 1.1s var(--ease)
+}
+.progres-tete{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+.progres-tete b{font-size:15px;font-weight:500}
+.progres-tete span{font-size:15px;font-weight:600;color:var(--rose)}
+
+/* ---------- Le fil du parcours (élément signature) ---------- */
+.fil{list-style:none;margin:0;padding:0;position:relative}
+.fil::before{
+  content:"";position:absolute;left:17px;top:24px;bottom:24px;width:2px;
+  background:linear-gradient(180deg,var(--aqua) 0%,#DCEAEA 55%,#DCEAEA 100%);border-radius:2px
+}
+.fil li{position:relative;padding:0 0 4px 52px;margin-bottom:14px;min-height:36px}
+.fil .puce{
+  position:absolute;left:0;top:0;width:36px;height:36px;border-radius:var(--r-pill);
+  display:grid;place-items:center;font-size:15px;font-weight:600;
+  background:#fff;border:2px solid #DCEAEA;color:var(--ink-3);z-index:1
+}
+.fil .fait .puce{background:var(--aqua);border-color:var(--aqua);color:#fff}
+.fil .encours .puce{
+  background:#fff;border-color:var(--rose);color:var(--rose);
+  box-shadow:0 0 0 6px var(--rose-soft)
+}
+.fil .titre{font-weight:500;font-size:16px;display:block;line-height:1.35}
+.fil .etat{font-size:13.5px;color:var(--ink-3);font-weight:300}
+.fil .encours .titre{color:var(--rose)}
+.fil .verrou .titre{color:var(--ink-3);font-weight:300}
+
+/* ---------- Lecteur ---------- */
+.cover{
+  position:relative;width:100%;aspect-ratio:16/11;max-height:212px;
+  border-radius:var(--r-lg);overflow:hidden;margin:14px 0 8px;
+  box-shadow:var(--shadow-lg)
+}
+.cover svg{display:block;width:100%;height:100%}
+.cover .num{
+  position:absolute;left:22px;bottom:18px;color:#fff;font-weight:600;
+  font-size:12px;letter-spacing:.18em;text-transform:uppercase;opacity:.95
+}
+.lecteur{display:flex;align-items:center;justify-content:center;gap:26px;margin:18px 0 14px}
+.saut{
+  position:relative;width:56px;height:56px;border-radius:var(--r-pill);background:#fff;
+  border:1px solid var(--border);display:grid;place-items:center;color:var(--ink-2);
+  box-shadow:var(--shadow);transition:transform .2s var(--ease)
+}
+.saut:active{transform:scale(.94)}
+.saut small{
+  position:absolute;left:0;right:0;top:54%;transform:translateY(-50%);
+  text-align:center;font-size:9.5px;font-weight:600;letter-spacing:.02em
+}
+.play-zone{position:relative;width:96px;height:96px;flex:none}
+.play-zone>svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.play-zone .anneau-bg{fill:none;stroke:#E4EFEF;stroke-width:5}
+.play-zone .anneau{fill:none;stroke:url(#degrade-anneau);stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset .3s linear}
+.play-btn{
+  position:absolute;inset:9px;border-radius:var(--r-pill);
+  background:var(--aqua);color:#fff;display:grid;place-items:center;
+  box-shadow:0 12px 26px rgba(59,191,191,.34);transition:transform .2s var(--ease)
+}
+.play-btn:active{transform:scale(.95)}
+.temps{display:flex;justify-content:space-between;font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums;margin-top:10px}
+.piste{
+  -webkit-appearance:none;appearance:none;width:100%;height:26px;background:transparent;margin:0;display:block
+}
+.piste::-webkit-slider-runnable-track{height:6px;border-radius:var(--r-pill);background:linear-gradient(90deg,var(--aqua) var(--lu,0%),#E4EFEF var(--lu,0%))}
+.piste::-webkit-slider-thumb{
+  -webkit-appearance:none;width:22px;height:22px;border-radius:var(--r-pill);background:#fff;
+  border:3px solid var(--rose);margin-top:-8px;box-shadow:0 3px 10px rgba(18,51,51,.18)
+}
+.piste::-moz-range-track{height:6px;border-radius:var(--r-pill);background:#E4EFEF}
+.piste::-moz-range-progress{height:6px;border-radius:var(--r-pill);background:var(--aqua)}
+.piste::-moz-range-thumb{width:22px;height:22px;border:3px solid var(--rose);border-radius:var(--r-pill);background:#fff}
+.note-ecoute{
+  background:var(--aqua-soft);border-radius:var(--r);padding:16px 18px;
+  font-size:15px;color:var(--ink-2);font-weight:300;line-height:1.55;margin-top:22px
+}
+.note-ecoute b{font-weight:500;color:var(--ink);display:block;margin-bottom:2px}
+
+/* ---------- Navigation ---------- */
+.nav{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:480px;background:rgba(255,255,255,.92);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-top:1px solid var(--border);display:none;
+  padding:10px 12px calc(10px + env(safe-area-inset-bottom));z-index:40
+}
+@media(min-width:520px){.nav{border-radius:0 0 32px 32px;bottom:24px;max-width:480px}}
+.nav.visible{display:flex}
+.nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;color:var(--ink-3);font-size:11.5px;font-weight:500;border-radius:14px}
+.nav button.actif{color:var(--aqua-dark)}
+.nav svg{width:23px;height:23px}
+
+/* ---------- Écran de déblocage ---------- */
+#screen-fin{
+  position:fixed;inset:0;z-index:60;background:linear-gradient(170deg,#FFFFFF 0%,var(--aqua-soft) 100%);
+  display:none;place-items:center;text-align:center;padding:32px
+}
+#screen-fin.actif{display:grid;animation:fade .6s var(--ease) both}
+.sceau{
+  width:112px;height:112px;border-radius:var(--r-pill);margin:0 auto 26px;
+  background:linear-gradient(140deg,var(--aqua),var(--rose));
+  background:linear-gradient(140deg in oklab,var(--aqua) 5%,var(--rose) 105%);display:grid;place-items:center;color:#fff;
+  box-shadow:0 20px 44px rgba(232,49,138,.26);animation:sceau 1s var(--ease) both
+}
+@keyframes sceau{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
+.halo{position:absolute;width:112px;height:112px;border-radius:var(--r-pill);border:2px solid var(--aqua);animation:halo 2.4s var(--ease) infinite}
+@keyframes halo{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.9);opacity:0}}
+
+/* ---------- Divers ---------- */
+.bandeau-demo{
+  background:#FFF6E5;border:1px solid #F3E2BE;color:#7A5A17;border-radius:var(--r);
+  padding:12px 16px;font-size:13px;line-height:1.5;margin:0 0 18px;font-weight:300
+}
+.bandeau-demo b{font-weight:600}
+.bandeau-demo button{color:#7A5A17;text-decoration:underline;font-size:13px;font-weight:500;padding:0}
+.ligne{height:1px;background:var(--border);margin:22px 0}
+.info-ligne{display:flex;justify-content:space-between;padding:14px 0;font-size:16px;border-bottom:1px solid var(--border)}
+.info-ligne span{color:var(--ink-3);font-weight:300}
+.info-ligne b{font-weight:500}
+.centre{text-align:center}
+.champ-tel{
+  width:100%;padding:20px 22px;border:2px solid var(--border);border-radius:var(--r);
+  background:#fff;font-family:inherit;font-size:21px;text-align:center;color:var(--ink);
+  letter-spacing:.04em
+}
+.champ-tel:focus{outline:none;border-color:var(--aqua);box-shadow:0 0 0 5px var(--aqua-soft)}
+.erreur{color:#C9285F;font-size:15px;text-align:center;margin:12px 0 0}
+.chargement{
+  display:grid;place-items:center;min-height:70dvh;gap:16px;color:var(--ink-3);font-weight:300
+}
+.rond{
+  width:34px;height:34px;border-radius:50%;border:3px solid var(--border);
+  border-top-color:var(--aqua);animation:tourne .9s linear infinite
+}
+@keyframes tourne{to{transform:rotate(360deg)}}
+.vide{padding:60px 22px;text-align:center;color:var(--ink-2)}
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ========== CHARGEMENT ========== -->
+  <section class="screen actif" id="screen-chargement">
+    <div class="chargement"><div class="rond"></div><span>Votre parcours arrive…</span></div>
+  </section>
+
+  <!-- ========== 1. ÉCRAN D'ARRIVÉE ========== -->
+  <section class="screen" id="screen-arrivee">
+    <div class="entete" style="justify-content:center;padding-top:56px">
+      <div class="marque centre">
+        <b>Mon parcours</b><span>by MAbeauty<i>plus</i></span>
+      </div>
+    </div>
+    <div style="height:140px;margin:14px 0 30px" id="illu-arrivee"></div>
+    <p class="eyebrow rose centre" id="salut-arrivee">Bonjour</p>
+    <h1 class="centre" style="margin-bottom:18px">Bienvenue dans votre parcours audio</h1>
+    <p class="doux centre">Ces épisodes ont été conçus pour vous accompagner progressivement, entre vos rendez-vous MAbeautyplus.</p>
+    <p class="doux centre" style="margin-bottom:30px">Avancez à votre rythme. Chaque nouvelle étape se débloque après la précédente.</p>
+    <button class="btn" id="btn-commencer">Commencer mon parcours</button>
+    <p class="mini centre" style="margin-top:16px">Votre progression est enregistrée automatiquement.<br>Aucun mot de passe, aucune installation.</p>
+  </section>
+
+  <!-- ========== 2. ACCUEIL ========== -->
+  <section class="screen" id="screen-accueil">
+    <header class="entete">
+      <div class="marque"><b>Mon parcours</b><span>by MAbeauty<i>plus</i></span></div>
+      <div class="pastille" id="pastille-accueil">M</div>
+    </header>
+    <p class="eyebrow" id="salut-accueil">Bonjour</p>
+    <h1 style="margin-bottom:24px;font-size:26px" id="titre-accueil">Votre parcours</h1>
+
+    <div class="carte">
+      <div class="progres-tete">
+        <b id="progres-texte">0 étape terminée</b>
+        <span id="progres-pc">0 %</span>
+      </div>
+      <div class="barre"><i id="progres-barre"></i></div>
+    </div>
+
+    <div class="carte carte-active" id="carte-etape">
+      <p class="eyebrow rose" id="etape-num">Étape 1</p>
+      <h2 id="etape-titre">—</h2>
+      <p class="doux" style="margin:8px 0 18px;font-size:15px" id="etape-sous">—</p>
+      <p class="mini" id="etape-info" style="margin-bottom:20px">🎧 —</p>
+      <button class="btn rose" id="btn-ecouter">Commencer l'écoute</button>
+    </div>
+
+    <h3 style="margin:30px 0 18px">Votre parcours</h3>
+    <ul class="fil" id="fil-accueil"></ul>
+    <div style="height:20px"></div>
+  </section>
+
+  <!-- ========== 3. ÉCRAN D'ÉCOUTE ========== -->
+  <section class="screen" id="screen-ecoute">
+    <div class="entete">
+      <button class="btn-lien" id="btn-retour">← Mon parcours</button>
+    </div>
+    <p class="eyebrow rose" id="ec-num">Étape</p>
+    <h1 id="ec-titre" style="margin-bottom:6px;font-size:25px">—</h1>
+    <p class="doux" style="font-size:15px" id="ec-sous">—</p>
+
+    <div class="cover" id="ec-cover"></div>
+
+    <div class="lecteur">
+      <button class="saut" id="btn-moins" aria-label="Reculer de 15 secondes">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M11 4 6.5 8 11 12"/><path d="M6.6 8H14a5.4 5.4 0 0 1 0 10.8h-3"/></svg>
+        <small>15</small>
+      </button>
+
+      <div class="play-zone">
+        <svg viewBox="0 0 96 96" aria-hidden="true">
+          <defs><linearGradient id="degrade-anneau" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#3BBFBF"/><stop offset="100%" stop-color="#E8318A"/>
+          </linearGradient></defs>
+          <circle class="anneau-bg" cx="48" cy="48" r="45"/>
+          <circle class="anneau" id="anneau" cx="48" cy="48" r="45" stroke-dasharray="282.7" stroke-dashoffset="282.7"/>
+        </svg>
+        <button class="play-btn" id="btn-play" aria-label="Lecture">
+          <svg id="icone-play" width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>
+        </button>
+      </div>
+
+      <button class="saut" id="btn-plus" aria-label="Avancer de 15 secondes">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M13 4l4.5 4L13 12"/><path d="M17.4 8H10a5.4 5.4 0 0 0 0 10.8h3"/></svg>
+        <small>15</small>
+      </button>
+    </div>
+
+    <input type="range" class="piste" id="piste" min="0" max="1000" value="0" step="1" aria-label="Position dans l'épisode">
+    <div class="temps"><span id="t-actuel">00:00</span><span id="t-total">00:00</span></div>
+
+    <div class="carte" style="margin-top:22px;padding:20px 22px">
+      <div class="progres-tete">
+        <b>Écoute de cette étape</b><span id="ec-pc">0 %</span>
+      </div>
+      <div class="barre"><i id="ec-barre"></i></div>
+      <p class="mini" style="margin:12px 0 0" id="ec-reste">L'étape suivante se débloque une fois l'épisode écouté.</p>
+    </div>
+
+    <div class="note-ecoute">
+      <b>Prenez ce moment pour vous.</b>
+      Vous pouvez interrompre votre écoute et revenir plus tard : votre progression sera conservée.
+    </div>
+    <div style="height:30px"></div>
+    <audio id="audio" preload="metadata"></audio>
+  </section>
+
+  <!-- ========== 5. MON PARCOURS ========== -->
+  <section class="screen" id="screen-parcours">
+    <header class="entete">
+      <div class="marque"><b>Mon parcours</b><span>by MAbeauty<i>plus</i></span></div>
+      <div class="pastille" id="pastille-parcours">M</div>
+    </header>
+    <h1 style="margin-bottom:22px">Votre parcours</h1>
+    <div class="carte">
+      <div class="progres-tete">
+        <b id="pa-texte">0 étape terminée</b><span id="pa-pc">0 %</span>
+      </div>
+      <div class="barre"><i id="pa-barre"></i></div>
+    </div>
+    <ul class="fil" id="fil-parcours" style="margin-top:26px"></ul>
+    <p class="doux" style="font-size:15px;margin:26px 0 30px">
+      Votre accompagnement se construit étape après étape. Il n'est pas nécessaire d'aller vite.
+    </p>
+  </section>
+
+  <!-- ========== 6. MON ESPACE ========== -->
+  <section class="screen" id="screen-espace">
+    <header class="entete">
+      <div class="marque"><b>Mon parcours</b><span>by MAbeauty<i>plus</i></span></div>
+      <div class="pastille" id="pastille-espace">M</div>
+    </header>
+    <h1 style="margin-bottom:22px">Mon espace</h1>
+    <div class="carte">
+      <div class="info-ligne"><span>Vous</span><b id="es-nom">—</b></div>
+      <div class="info-ligne"><span>Votre parcours</span><b id="es-parcours">—</b></div>
+      <div class="info-ligne" style="border:0"><span>Progression</span><b id="es-progres">—</b></div>
+    </div>
+    <div class="carte">
+      <h3 style="margin-bottom:8px">Besoin d'aide ?</h3>
+      <p class="doux" style="font-size:15px;margin-bottom:16px">Contactez votre centre MAbeautyplus, votre thérapeute vous répondra.</p>
+      <a class="btn clair" id="btn-contact" href="tel:+33466000000">Appeler mon centre</a>
+    </div>
+    <button class="btn clair" id="btn-installer">Ajouter à mon écran d'accueil</button>
+    <p class="mini centre" style="margin:18px 0 30px">Version 1.0 · MAbeautyplus</p>
+  </section>
+
+  <!-- ========== 4. DÉBLOCAGE ========== -->
+  <section id="screen-fin">
+    <div>
+      <div style="position:relative;display:grid;place-items:center">
+        <div class="halo"></div>
+        <div class="sceau">
+          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+      </div>
+      <h1 id="fin-titre" style="margin-bottom:12px">Bravo !</h1>
+      <p class="doux" style="font-size:17px">Une nouvelle étape vient d'être franchie.<br>Vous avancez dans votre parcours MAbeautyplus.</p>
+      <div class="carte" style="margin:26px 0 28px;text-align:left">
+        <div class="progres-tete"><b id="fin-compte">— étapes terminées</b><span id="fin-pc">0 %</span></div>
+        <div class="barre"><i id="fin-barre"></i></div>
+        <p class="mini" style="margin:14px 0 0" id="fin-suivant">🔓 Votre prochaine étape est maintenant disponible.</p>
+      </div>
+      <button class="btn rose" id="btn-suivant">Découvrir la prochaine étape</button>
+      <button class="btn-lien" id="btn-plus-tard" style="margin-top:10px">Plus tard</button>
+    </div>
+  </section>
+
+  <!-- ========== ACCÈS REFUSÉ ========== -->
+  <section class="screen" id="screen-refus">
+    <div class="vide">
+      <div class="pastille" style="margin:0 auto 22px;width:56px;height:56px">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.4" width="14" height="10" rx="2.6"/><path d="M8.6 10.4V7.6a3.4 3.4 0 0 1 6.8 0v2.8"/></svg>
+      </div>
+      <h2 style="margin-bottom:12px" id="refus-titre">Ce lien n'est plus valable</h2>
+      <p class="doux" id="refus-texte" style="margin-bottom:26px">Retrouvez votre parcours avec votre numéro de téléphone.</p>
+      <button class="btn" id="btn-vers-tel">Retrouver mon parcours</button>
+    </div>
+  </section>
+
+  <!-- ========== IDENTIFICATION PAR TÉLÉPHONE ========== -->
+  <section class="screen" id="screen-tel">
+    <div class="entete" style="justify-content:center;padding-top:48px">
+      <div class="marque centre"><b>Mon parcours</b><span>by MAbeauty<i>plus</i></span></div>
+    </div>
+    <div id="tel-formulaire">
+      <h1 class="centre" style="margin:26px 0 14px">Retrouver mon parcours</h1>
+      <p class="doux centre" style="margin-bottom:26px">Saisissez le numéro de téléphone que vous avez donné à votre centre.</p>
+      <input class="champ-tel" id="champ-tel" type="tel" inputmode="tel" autocomplete="tel"
+             placeholder="06 12 34 56 78" aria-label="Votre numéro de téléphone">
+      <p class="erreur" id="tel-erreur" hidden></p>
+      <button class="btn" id="btn-tel" style="margin-top:18px">Continuer</button>
+      <p class="mini centre" style="margin-top:16px">Aucun mot de passe. Si nous ne reconnaissons pas votre appareil, votre lien vous est renvoyé par SMS.</p>
+    </div>
+    <div id="tel-envoye" hidden style="text-align:center;padding-top:30px">
+      <div class="sceau" style="width:88px;height:88px;margin-bottom:24px">
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5 12 13l9-5.5"/><rect x="3" y="5" width="18" height="14" rx="3"/></svg>
+      </div>
+      <h1 style="margin-bottom:14px">Votre lien vient de partir</h1>
+      <p class="doux">Vous allez recevoir un SMS avec l'accès à votre parcours. Il suffit de cliquer dessus.</p>
+      <p class="mini" style="margin-top:22px">Rien reçu au bout de quelques minutes ? Contactez votre centre MAbeautyplus.</p>
+    </div>
+  </section>
+
+  <!-- ========== NAVIGATION ========== -->
+  <nav class="nav" id="nav">
+    <button data-aller="accueil" class="actif">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/></svg>
+      Accueil
+    </button>
+    <button data-aller="parcours">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a8 8 0 0 1 16 0"/><rect x="2.5" y="13.5" width="4" height="7" rx="2"/><rect x="17.5" y="13.5" width="4" height="7" rx="2"/></svg>
+      Mon parcours
+    </button>
+    <button data-aller="espace">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.7"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>
+      Mon espace
+    </button>
+  </nav>
+</div>
+
+<script>
+/* =========================================================
+   MON PARCOURS by MAbeautyplus — application cliente
+   Les données viennent des fonctions Netlify. Le navigateur
+   ne détient aucune clé et ne décide jamais d'un déblocage.
+   ========================================================= */
+
+const CLE_JETON = 'mbp_jeton';
+const CLE_APPAREIL = 'mbp_appareil';
+const SAUVEGARDE_MS = 30000;
+
+/* ---------------------------------------------------- Stockage local --- */
+const memoire = {};
+const Local = {
+  lire(k) { try { return localStorage.getItem(k); } catch { return memoire[k] ?? null; } },
+  ecrire(k, v) { try { localStorage.setItem(k, v); } catch { memoire[k] = v; } },
+  effacer(k) { try { localStorage.removeItem(k); } catch { delete memoire[k]; } },
+};
+
+function idAppareil() {
+  let id = Local.lire(CLE_APPAREIL);
+  if (!id) {
+    id = 'a' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+    Local.ecrire(CLE_APPAREIL, id);
+  }
+  return id;
+}
+
+/* ------------------------------------------------------------- API --- */
+async function api(route, corps) {
+  const r = await fetch('/api/' + route, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...corps, appareil: idAppareil() }),
+  });
+  const donnees = await r.json().catch(() => ({}));
+  if (!r.ok) {
+    const err = new Error(donnees.erreur || 'erreur');
+    err.code = donnees.erreur;
+    err.statut = r.status;
+    throw err;
+  }
+  return donnees;
+}
+
+/* ----------------------------------------------------------- État --- */
+let jeton = null;
+let etat = null;        // réponse de /api/parcours
+let numeroCourant = 0;  // numéro de l'étape ouverte
+let couv = null;        // Uint8Array : une case par seconde écoutée
+let dureeEp = 0;
+let celebrationEnCours = false;
+let minuteur = null;
+let sale = false;       // progression non encore envoyée
+
+const $ = (s) => document.querySelector(s);
+const mmss = (s) => {
+  s = Math.max(0, Math.floor(s || 0));
+  return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+};
+
+/* --------------------------------------------------- Couverture --- */
+function empaqueter(bits) {
+  const n = bits.length;
+  const octets = new Uint8Array(Math.ceil(n / 8));
+  for (let i = 0; i < n; i++) if (bits[i]) octets[i >> 3] |= 128 >> (i & 7);
+  let s = '';
+  for (const o of octets) s += String.fromCharCode(o);
+  return btoa(s);
+}
+function depaqueter(base64, n) {
+  const bits = new Uint8Array(n);
+  if (!base64) return bits;
+  let bin;
+  try { bin = atob(base64); } catch { return bits; }
+  for (let i = 0; i < n; i++) {
+    const o = bin.charCodeAt(i >> 3) || 0;
+    if (o & (128 >> (i & 7))) bits[i] = 1;
+  }
+  return bits;
+}
+function tauxLocal() {
+  if (!couv || !couv.length) return 0;
+  let n = 0;
+  for (const b of couv) if (b) n++;
+  return n / couv.length;
+}
+
+/* -------------------------------------------------- Utilitaires --- */
+const etapeParNumero = (n) => etat?.etapes.find((e) => e.numero === n);
+const etapeDisponible = () => etat?.etapes[etat.disponible];
+const initiale = () => (etat?.cliente.prenom || '?').charAt(0).toUpperCase();
+
+function couverture(i, cle) {
+  const a = (i * 37) % 360, r = 1 - (i % 3) * 0.12;
+  const g = `g_${cle || 'c'}_${i}`, v = `v_${cle || 'c'}_${i}`;
+  return `<svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#3BBFBF"/><stop offset="48%" stop-color="#96D6DA"/><stop offset="100%" stop-color="#F2A2C6" stop-opacity="${0.6 * r + 0.4}"/>
+      </linearGradient>
+      <linearGradient id="${v}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity=".28"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <rect width="400" height="400" fill="url(#${g})"/>
+    <g transform="rotate(${a} 200 200)" opacity=".5">
+      <circle cx="200" cy="${120 + i * 14}" r="${150 + i * 7}" fill="none" stroke="#fff" stroke-width="1.2" opacity=".5"/>
+      <circle cx="200" cy="${170 + i * 10}" r="${110 + i * 5}" fill="none" stroke="#fff" stroke-width="1.2" opacity=".4"/>
+      <circle cx="200" cy="${220 + i * 6}"  r="${70 + i * 4}"  fill="none" stroke="#fff" stroke-width="1.2" opacity=".35"/>
+    </g>
+    <path d="M0 ${260 + i * 6} C 110 ${210 + i * 4}, 290 ${310 - i * 5}, 400 ${250 + i * 3} L400 400 L0 400 Z" fill="#fff" opacity=".16"/>
+    <path d="M0 ${300 + i * 4} C 130 ${255 + i * 3}, 270 ${350 - i * 4}, 400 ${295 + i * 2} L400 400 L0 400 Z" fill="#fff" opacity=".12"/>
+    <rect width="400" height="400" fill="url(#${v})"/>
+  </svg>`;
+}
+
+const ICONES = {
+  check: '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+  play: '<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>',
+  verrou: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.4" width="14" height="10" rx="2.6"/><path d="M8.6 10.4V7.6a3.4 3.4 0 0 1 6.8 0v2.8"/></svg>',
+};
+
+/* ------------------------------------------------------ Écrans --- */
+const ecrans = ['chargement', 'arrivee', 'accueil', 'ecoute', 'parcours', 'espace', 'refus', 'tel'];
+function aller(nom) {
+  ecrans.forEach((e) => $('#screen-' + e).classList.toggle('actif', e === nom));
+  $('#nav').classList.toggle('visible', ['accueil', 'parcours', 'espace'].includes(nom));
+  document.querySelectorAll('.nav button').forEach((b) => b.classList.toggle('actif', b.dataset.aller === nom));
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  if (nom === 'accueil') rendreAccueil();
+  if (nom === 'parcours') rendreParcours();
+  if (nom === 'espace') rendreEspace();
+}
+document.querySelectorAll('.nav button').forEach((b) => {
+  b.onclick = () => { pause(); aller(b.dataset.aller); };
+});
+
+/* ------------------------------------------------------ Rendus --- */
+function rendreFil(cible) {
+  const dispo = etat.disponible;
+  cible.innerHTML = etat.etapes.map((e, i) => {
+    const fini = e.terminee;
+    const encours = !fini && i === dispo;
+    const cls = fini ? 'fait' : (encours ? 'encours' : 'verrou');
+    const puce = fini ? ICONES.check : (encours ? ICONES.play : ICONES.verrou);
+    let titre, sousTexte;
+    if (fini) {
+      titre = e.titre; sousTexte = 'Écouté';
+    } else if (encours) {
+      titre = e.titre;
+      const t = Math.round((e.taux || 0) * 100);
+      sousTexte = t > 0 ? `En cours · ${t} % écouté` : 'Disponible';
+    } else if (i === dispo + 1) {
+      titre = 'Votre prochaine étape';
+      sousTexte = `Se débloque après l'étape ${dispo + 1}`;
+    } else {
+      titre = 'Étape ' + e.numero; sousTexte = 'À venir';
+    }
+    const num = (fini || encours) ? e.numero + '. ' : '';
+    return `<li class="${cls}" ${e.accessible ? `data-ouvrir="${e.numero}" style="cursor:pointer"` : ''}>
+      <span class="puce">${puce}</span>
+      <span class="titre">${num}${titre}</span>
+      <span class="etat">${sousTexte}</span>
+    </li>`;
+  }).join('');
+  cible.querySelectorAll('[data-ouvrir]').forEach((li) => {
+    li.onclick = () => ouvrirEtape(+li.dataset.ouvrir);
+  });
+}
+
+const pourcent = () => Math.round(etat.terminees / etat.total * 100);
+
+function rendreAccueil() {
+  const e = etapeDisponible();
+  $('#pastille-accueil').textContent = initiale();
+  $('#salut-accueil').textContent = 'Bonjour ' + etat.cliente.prenom;
+  $('#titre-accueil').textContent = 'Votre parcours MAbeautyplus';
+  $('#progres-texte').textContent =
+    `${etat.terminees} étape${etat.terminees > 1 ? 's' : ''} terminée${etat.terminees > 1 ? 's' : ''} sur ${etat.total}`;
+  $('#progres-pc').textContent = pourcent() + ' %';
+  requestAnimationFrame(() => { $('#progres-barre').style.width = pourcent() + '%'; });
+
+  $('#etape-num').textContent = 'Étape ' + e.numero;
+  $('#etape-titre').textContent = e.titre;
+  $('#etape-sous').textContent = e.sousTitre || '';
+  const reprise = (e.position || 0) > 10;
+  $('#etape-info').textContent = reprise
+    ? `🎧 ${e.dureeMin} min · vous étiez à ${mmss(e.position)}`
+    : `🎧 ${e.dureeMin} min`;
+  $('#btn-ecouter').textContent = reprise ? 'Reprendre mon écoute' : "Commencer l'écoute";
+  $('#btn-ecouter').onclick = () => ouvrirEtape(e.numero);
+  rendreFil($('#fil-accueil'));
+}
+
+function rendreParcours() {
+  $('#pastille-parcours').textContent = initiale();
+  $('#pa-texte').textContent =
+    `${etat.terminees} étape${etat.terminees > 1 ? 's' : ''} terminée${etat.terminees > 1 ? 's' : ''} sur ${etat.total}`;
+  $('#pa-pc').textContent = pourcent() + ' %';
+  requestAnimationFrame(() => { $('#pa-barre').style.width = pourcent() + '%'; });
+  rendreFil($('#fil-parcours'));
+}
+
+function rendreEspace() {
+  $('#pastille-espace').textContent = initiale();
+  const nom = etat.cliente.nom ? ' ' + etat.cliente.nom.charAt(0) + '.' : '';
+  $('#es-nom').textContent = etat.cliente.prenom + nom;
+  $('#es-parcours').textContent = etat.cliente.parcours;
+  $('#es-progres').textContent = etat.terminees + ' / ' + etat.total;
+}
+
+/* ------------------------------------------------------ Lecteur --- */
+const audio = $('#audio');
+const piste = $('#piste');
+
+async function ouvrirEtape(numero) {
+  const e = etapeParNumero(numero);
+  if (!e || !e.accessible) return;
+
+  numeroCourant = numero;
+  couv = null; dureeEp = 0; sale = false;
+  audio.pause(); audio.removeAttribute('src'); audio.load();
+
+  const i = etat.etapes.indexOf(e);
+  $('#ec-num').textContent = 'Étape ' + numero;
+  $('#ec-titre').textContent = e.titre;
+  $('#ec-sous').textContent = e.sousTitre || '';
+  $('#ec-cover').innerHTML = couverture(i, 'ec') + `<span class="num">Étape ${String(numero).padStart(2, '0')}</span>`;
+  $('#t-actuel').textContent = '00:00';
+  $('#t-total').textContent = mmss(e.dureeSec || e.dureeMin * 60);
+  majBoutonPlay(false);
+  aller('ecoute');
+
+  try {
+    const rep = await api('audio', { jeton, numero });
+    if (numeroCourant !== numero) return;          // la cliente a déjà changé d'écran
+    audio.src = rep.url;
+    audio.load();
+    const preparer = () => preparerCouverture(e, rep.dureeSec);
+    if (audio.readyState >= 1) preparer();
+    else audio.addEventListener('loadedmetadata', preparer, { once: true });
+  } catch (err) {
+    $('#ec-reste').textContent = err.code === 'etape-verrouillee'
+      ? "Cette étape n'est pas encore disponible."
+      : "L'épisode n'a pas pu être chargé. Vérifiez votre connexion.";
+  }
+}
+
+function preparerCouverture(etape, dureeServeur) {
+  dureeEp = Math.max(1, Math.floor(audio.duration || dureeServeur || etape.dureeMin * 60));
+  couv = depaqueter(etape.couverture, dureeEp);
+  const pos = etape.position || 0;
+  if (pos > 0 && pos < dureeEp - 2) audio.currentTime = pos;
+  majTemps(); majEcoute();
+}
+
+function marquer() {
+  if (audio.paused || !couv) return;
+  const s = Math.floor(audio.currentTime);
+  if (s >= 0 && s < couv.length) couv[s] = 1;
+}
+
+audio.addEventListener('timeupdate', () => {
+  marquer(); majTemps(); majEcoute();
+  if (couv && !minuteur) minuteur = setTimeout(() => { minuteur = null; envoyer(); }, SAUVEGARDE_MS);
+});
+audio.addEventListener('play', () => majBoutonPlay(true));
+audio.addEventListener('pause', () => { majBoutonPlay(false); envoyer(); });
+audio.addEventListener('ended', () => { majBoutonPlay(false); envoyer(); });
+audio.addEventListener('error', () => {
+  if (audio.getAttribute('src')) {
+    $('#ec-reste').textContent = "L'épisode n'a pas pu être lu. Vérifiez votre connexion.";
+  }
+});
+
+function majTemps() {
+  const d = audio.duration || dureeEp || 1;
+  $('#t-actuel').textContent = mmss(audio.currentTime);
+  $('#t-total').textContent = mmss(d);
+  const pcLu = Math.min(100, audio.currentTime / d * 100);
+  if (!piste.matches(':active')) piste.value = Math.round(pcLu * 10);
+  piste.style.setProperty('--lu', pcLu.toFixed(1) + '%');
+  const C = 2 * Math.PI * 45;
+  $('#anneau').style.strokeDashoffset = C - (audio.currentTime / d) * C;
+}
+
+function majEcoute() {
+  if (!couv) { $('#ec-pc').textContent = '0 %'; $('#ec-barre').style.width = '0%'; return; }
+  const t = tauxLocal();
+  const pc = Math.round(t * 100);
+  const seuil = etat.seuil || 0.9;
+  $('#ec-pc').textContent = pc + ' %';
+  $('#ec-barre').style.width = Math.min(100, pc / seuil) + '%';
+  const reste = Math.max(0, Math.ceil((seuil - t) * dureeEp / 60));
+  $('#ec-reste').textContent = t >= seuil
+    ? '🔓 Étape validée, la suivante est disponible.'
+    : (pc > 0
+      ? `Encore environ ${reste} min d'écoute pour débloquer l'étape suivante.`
+      : "L'étape suivante se débloque une fois cet épisode écouté.");
+  if (t >= seuil && !celebrationEnCours) envoyer();
+}
+
+function majBoutonPlay(enLecture) {
+  $('#icone-play').innerHTML = enLecture
+    ? '<rect x="7.5" y="5" width="3.4" height="14" rx="1.4"/><rect x="13.1" y="5" width="3.4" height="14" rx="1.4"/>'
+    : '<path d="M8 5.5v13l11-6.5z"/>';
+  $('#btn-play').setAttribute('aria-label', enLecture ? 'Pause' : 'Lecture');
+}
+function pause() { if (!audio.paused) audio.pause(); }
+
+$('#btn-play').onclick = () => { audio.paused ? audio.play().catch(() => {}) : audio.pause(); };
+$('#btn-moins').onclick = () => { audio.currentTime = Math.max(0, audio.currentTime - 15); };
+$('#btn-plus').onclick = () => { audio.currentTime = Math.min((audio.duration || 0) - 0.3, audio.currentTime + 15); };
+piste.addEventListener('input', () => {
+  // Déplacer le curseur ne coche aucune seconde : seules les secondes traversées
+  // en lecture sont comptées.
+  audio.currentTime = piste.value / 1000 * (audio.duration || dureeEp || 1);
+});
+$('#btn-retour').onclick = () => { pause(); aller('accueil'); };
+
+/* -------------------------------------- Envoi de la progression --- */
+async function envoyer() {
+  if (!couv || !numeroCourant || celebrationEnCours) return;
+  const charge = {
+    jeton,
+    numero: numeroCourant,
+    couverture: empaqueter(couv),
+    position: Math.floor(audio.currentTime),
+    duree: dureeEp,
+  };
+  try {
+    const rep = await api('progression', charge);
+    sale = false;
+    const e = etapeParNumero(numeroCourant);
+    if (e) { e.taux = rep.taux; e.position = charge.position; }
+    if (rep.terminee && !e?.terminee) await celebrer();
+  } catch {
+    sale = true;   // on retentera à la prochaine occasion
+  }
+}
+
+/** Dernier envoi quand la page se ferme : sendBeacon survit à la fermeture. */
+function envoiUltime() {
+  if (!couv || !numeroCourant) return;
+  const charge = JSON.stringify({
+    jeton, numero: numeroCourant, appareil: idAppareil(),
+    couverture: empaqueter(couv), position: Math.floor(audio.currentTime), duree: dureeEp,
+  });
+  try {
+    navigator.sendBeacon('/api/progression', new Blob([charge], { type: 'application/json' }));
+  } catch { /* rien à faire de plus */ }
+}
+document.addEventListener('visibilitychange', () => { if (document.hidden) envoiUltime(); });
+window.addEventListener('pagehide', envoiUltime);
+window.addEventListener('online', () => { if (sale) envoyer(); });
+
+/* ---------------------------------------------------- Déblocage --- */
+async function celebrer() {
+  celebrationEnCours = true;
+  pause();
+  await rafraichir();
+  const dernier = etat.terminees >= etat.total;
+  $('#fin-titre').textContent = 'Bravo ' + etat.cliente.prenom + ' !';
+  $('#fin-compte').textContent =
+    `${etat.terminees} étape${etat.terminees > 1 ? 's' : ''} terminée${etat.terminees > 1 ? 's' : ''} sur ${etat.total}`;
+  $('#fin-pc').textContent = pourcent() + ' %';
+  $('#fin-suivant').textContent = dernier
+    ? "🎉 Vous avez terminé l'ensemble de votre parcours audio."
+    : '🔓 Votre prochaine étape est maintenant disponible.';
+  $('#btn-suivant').textContent = dernier ? 'Revenir à mon parcours' : 'Découvrir la prochaine étape';
+  $('#screen-fin').classList.add('actif');
+  requestAnimationFrame(() => { $('#fin-barre').style.width = pourcent() + '%'; });
+}
+
+function fermerCelebration(ouvrirSuivante) {
+  $('#screen-fin').classList.remove('actif');
+  celebrationEnCours = false;
+  const suivante = etapeDisponible();
+  if (ouvrirSuivante && suivante && !suivante.terminee) ouvrirEtape(suivante.numero);
+  else aller('accueil');
+}
+$('#btn-suivant').onclick = () => fermerCelebration(true);
+$('#btn-plus-tard').onclick = () => fermerCelebration(false);
+
+/* ------------------------------------------------ Identification --- */
+function jetonURL() {
+  const p = new URLSearchParams(location.search).get('c');
+  if (p) return p.trim();
+  const seg = location.pathname.split('/').filter(Boolean).pop() || '';
+  return /^[a-z0-9]{6,40}$/i.test(seg) && !seg.includes('.') ? seg : null;
+}
+
+async function rafraichir() {
+  etat = await api('parcours', { jeton });
+  return etat;
+}
+
+const MESSAGES = {
+  'lien-invalide': ["Ce lien n'est plus valable", 'Retrouvez votre parcours avec votre numéro de téléphone.'],
+  'acces-suspendu': ['Votre accès est en pause', 'Contactez votre centre MAbeautyplus, votre thérapeute pourra le réactiver.'],
+  'trop-appareils': ['Accès déjà utilisé', 'Ce parcours est personnel et déjà associé à vos appareils. Contactez votre centre MAbeautyplus.'],
+  'parcours-vide': ['Votre parcours arrive bientôt', 'Vos épisodes sont en cours de préparation. Contactez votre centre MAbeautyplus.'],
+};
+
+function montrerRefus(code) {
+  const [titre, texte] = MESSAGES[code] || ['Connexion impossible', 'Vérifiez votre connexion internet et réessayez.'];
+  $('#refus-titre').textContent = titre;
+  $('#refus-texte').textContent = texte;
+  $('#btn-vers-tel').hidden = code === 'trop-appareils' || code === 'acces-suspendu';
+  aller('refus');
+}
+
+async function demarrer() {
+  jeton = jetonURL() || Local.lire(CLE_JETON);
+  if (!jeton) { aller('tel'); return; }
+
+  try {
+    await rafraichir();
+  } catch (err) {
+    if (err.code === 'lien-invalide') Local.effacer(CLE_JETON);
+    montrerRefus(err.code);
+    return;
+  }
+
+  Local.ecrire(CLE_JETON, jeton);
+  // On retire le jeton de la barre d'adresse : plus rien de personnel n'y traîne.
+  if (location.search.includes('c=')) history.replaceState({}, '', location.pathname);
+
+  $('#salut-arrivee').textContent = 'Bonjour ' + etat.cliente.prenom + ' 👋';
+  $('#illu-arrivee').innerHTML =
+    `<div style="width:130px;height:130px;margin:0 auto;border-radius:50%;overflow:hidden;box-shadow:var(--shadow-lg)">${couverture(0, 'arr')}</div>`;
+  aller(etat.cliente.vu ? 'accueil' : 'arrivee');
+}
+
+$('#btn-commencer').onclick = () => aller('accueil');
+$('#btn-vers-tel').onclick = () => aller('tel');
+
+/* Identification par téléphone */
+const champTel = $('#champ-tel');
+async function identifier() {
+  const numero = champTel.value.trim();
+  const erreur = $('#tel-erreur');
+  erreur.hidden = true;
+  if (numero.replace(/\D/g, '').length < 9) {
+    erreur.textContent = 'Ce numéro semble incomplet.';
+    erreur.hidden = false;
+    champTel.focus();
+    return;
+  }
+  const bouton = $('#btn-tel');
+  bouton.disabled = true;
+  bouton.textContent = 'Un instant…';
+  try {
+    const rep = await api('acces', { telephone: numero });
+    if (rep.mode === 'direct') {
+      jeton = rep.jeton;
+      Local.ecrire(CLE_JETON, jeton);
+      await rafraichir();
+      aller(etat.cliente.vu ? 'accueil' : 'arrivee');
+      return;
+    }
+    $('#tel-formulaire').hidden = true;
+    $('#tel-envoye').hidden = false;
+  } catch (err) {
+    erreur.textContent = err.code === 'trop-de-tentatives'
+      ? 'Trop d\u2019essais. Patientez quelques minutes ou appelez votre centre.'
+      : 'Connexion impossible. Réessayez dans un instant.';
+    erreur.hidden = false;
+  } finally {
+    bouton.disabled = false;
+    bouton.textContent = 'Continuer';
+  }
+}
+$('#btn-tel').onclick = identifier;
+champTel.addEventListener('keydown', (e) => { if (e.key === 'Enter') identifier(); });
+
+/* ------------------------------------------------ Écran verrouillé --- */
+function majMediaSession() {
+  if (!('mediaSession' in navigator) || !etat) return;
+  const e = etapeParNumero(numeroCourant);
+  if (!e) return;
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: e.titre,
+    artist: 'Mon parcours · MAbeautyplus',
+    album: etat.cliente.parcours,
+  });
+  navigator.mediaSession.setActionHandler('play', () => audio.play());
+  navigator.mediaSession.setActionHandler('pause', () => audio.pause());
+  navigator.mediaSession.setActionHandler('seekbackward', () => {
+    audio.currentTime = Math.max(0, audio.currentTime - 15);
+  });
+  navigator.mediaSession.setActionHandler('seekforward', () => {
+    audio.currentTime = Math.min((audio.duration || 0) - 0.3, audio.currentTime + 15);
+  });
+  // Pas de piste suivante : le parcours avance étape par étape.
+  navigator.mediaSession.setActionHandler('nexttrack', null);
+  navigator.mediaSession.setActionHandler('previoustrack', null);
+}
+audio.addEventListener('play', majMediaSession);
+
+/* ------------------------------------------------------ Installation --- */
+let invite = null;
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); invite = e; });
+$('#btn-installer').onclick = () => {
+  if (invite) { invite.prompt(); invite = null; return; }
+  alert("Sur iPhone : appuyez sur le bouton Partager, puis « Sur l'écran d'accueil ».\nSur Android : menu ⋮, puis « Ajouter à l'écran d'accueil ».");
+};
+
+/* -------------------------------------------------------- Démarrage --- */
+demarrer();
+
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>

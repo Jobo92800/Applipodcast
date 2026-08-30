@@ -1,0 +1,53 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# --- Routes de l'API ---------------------------------------------------------
+[[redirects]]
+  from = "/api/parcours"
+  to = "/.netlify/functions/parcours"
+  status = 200
+[[redirects]]
+  from = "/api/audio"
+  to = "/.netlify/functions/audio"
+  status = 200
+[[redirects]]
+  from = "/api/progression"
+  to = "/.netlify/functions/progression"
+  status = 200
+[[redirects]]
+  from = "/api/acces"
+  to = "/.netlify/functions/acces"
+  status = 200
+[[redirects]]
+  from = "/api/admin"
+  to = "/.netlify/functions/admin"
+  status = 200
+
+# --- Espace thérapeute -------------------------------------------------------
+[[redirects]]
+  from = "/admin"
+  to = "/admin.html"
+  status = 200
+
+# --- Liens personnels : /marie/k3xf9pq2mw7br4tlzy6n --------------------------
+[[redirects]]
+  from = "/:prenom/:jeton"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), camera=(), microphone=()"
+
+[[headers]]
+  for = "/admin.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

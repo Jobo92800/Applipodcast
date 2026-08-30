@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Espace thérapeute — Mon parcours MAbeautyplus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --aqua:#3BBFBF;--aqua-dark:#2C9C9C;--aqua-soft:#E8F6F6;
+  --rose:#E8318A;--rose-soft:#FDECF4;
+  --bg:#F5FAFA;--card:#fff;--border:#E2EDED;
+  --ink:#123333;--ink-2:#4A6A6A;--ink-3:#8AA5A5;
+  --r:18px;--shadow:0 10px 30px rgba(18,51,51,.06);
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Poppins',-apple-system,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.6}
+button{font-family:inherit;font-size:inherit;border:0;background:none;cursor:pointer;color:inherit}
+input,select{font-family:inherit;font-size:16px}
+:focus-visible{outline:3px solid var(--aqua);outline-offset:2px;border-radius:8px}
+.wrap{max-width:1040px;margin:0 auto;padding:28px 22px 80px}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 0 26px;flex-wrap:wrap}
+.marque{line-height:1.15}
+.marque b{display:block;font-size:14px;font-weight:600;letter-spacing:.22em;text-transform:uppercase}
+.marque span{font-size:11px;letter-spacing:.1em;color:var(--ink-3);font-weight:300}
+.marque i{font-style:normal;color:var(--rose)}
+h1{font-size:27px;font-weight:600;margin:0 0 4px;letter-spacing:-.01em}
+h2{font-size:21px;font-weight:600;margin:0}
+.doux{color:var(--ink-2);font-weight:300}
+.mini{font-size:13.5px;color:var(--ink-3);font-weight:300}
+.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 22px;border-radius:999px;background:var(--aqua);color:#fff;font-weight:500;box-shadow:0 8px 20px rgba(59,191,191,.28);transition:transform .2s var(--ease)}
+.btn:active{transform:scale(.98)}
+.btn.rose{background:var(--rose);box-shadow:0 8px 20px rgba(232,49,138,.24)}
+.btn.clair{background:#fff;color:var(--ink);border:1px solid var(--border);box-shadow:var(--shadow)}
+.btn.mini{padding:9px 16px;font-size:14px;box-shadow:none}
+.carte{background:var(--card);border:1px solid var(--border);border-radius:26px;box-shadow:var(--shadow);padding:26px;margin-bottom:20px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--aqua-dark);padding:0 12px 14px;border-bottom:1px solid var(--border)}
+td{padding:16px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr[data-id]{cursor:pointer;transition:background .18s}
+tr[data-id]:hover{background:var(--aqua-soft)}
+.qui{display:flex;align-items:center;gap:12px}
+.pastille{width:40px;height:40px;border-radius:999px;background:linear-gradient(135deg,var(--aqua),var(--rose) 130%);background:linear-gradient(135deg in oklab,var(--aqua),var(--rose) 130%);color:#fff;display:grid;place-items:center;font-weight:600;flex:none}
+.qui b{font-weight:500;display:block;line-height:1.25}
+.badge{display:inline-block;padding:4px 12px;border-radius:999px;font-size:13px;font-weight:500;background:var(--aqua-soft);color:var(--aqua-dark)}
+.badge.gris{background:#EFF4F4;color:var(--ink-3)}
+.badge.rose{background:var(--rose-soft);color:var(--rose)}
+.jauge{display:flex;align-items:center;gap:10px;min-width:150px}
+.jauge .barre{flex:1;height:7px;border-radius:999px;background:#E4EFEF;overflow:hidden}
+.jauge .barre i{display:block;height:100%;background:linear-gradient(90deg,var(--aqua),var(--rose));background:linear-gradient(90deg in oklab,var(--aqua),var(--rose));border-radius:999px}
+.jauge span{font-size:14px;font-variant-numeric:tabular-nums;color:var(--ink-2);white-space:nowrap}
+label{display:block;font-size:13.5px;font-weight:500;margin:0 0 6px;color:var(--ink-2)}
+.champ{width:100%;padding:14px 16px;border:1px solid var(--border);border-radius:14px;background:#fff;margin-bottom:16px;color:var(--ink)}
+.champ:focus{outline:none;border-color:var(--aqua);box-shadow:0 0 0 4px var(--aqua-soft)}
+.choix{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
+.choix label{display:block;margin:0;cursor:pointer}
+.choix input{position:absolute;opacity:0;pointer-events:none}
+.choix span{display:block;padding:16px 12px;border:2px solid var(--border);border-radius:16px;text-align:center;font-weight:500;background:#fff;transition:.18s}
+.choix small{display:block;font-size:12px;font-weight:300;color:var(--ink-3);margin-top:2px}
+.choix input:checked+span{border-color:var(--rose);background:var(--rose-soft);color:var(--rose)}
+.choix input:focus-visible+span{outline:3px solid var(--aqua);outline-offset:2px}
+.voile{position:fixed;inset:0;background:rgba(18,51,51,.34);backdrop-filter:blur(3px);display:none;place-items:center;padding:20px;z-index:50}
+.voile.ouvert{display:grid}
+.modale{background:#fff;border-radius:28px;padding:30px;max-width:520px;width:100%;max-height:90vh;overflow:auto;box-shadow:0 30px 70px rgba(18,51,51,.2);animation:pop .35s var(--ease) both}
+@keyframes pop{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
+.lien-box{display:flex;gap:8px;align-items:center;background:var(--aqua-soft);border-radius:14px;padding:12px 14px;margin:10px 0 18px;font-size:14px;word-break:break-all}
+.lien-box code{font-family:ui-monospace,Menlo,monospace;flex:1;color:var(--ink)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.ligne-info{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--border);font-size:15px}
+.ligne-info span{color:var(--ink-3);font-weight:300}
+.ligne-info b{font-weight:500}
+.vide{text-align:center;padding:56px 20px;color:var(--ink-2)}
+.onglets{display:flex;gap:8px;margin-bottom:22px}
+.onglet{padding:11px 22px;border-radius:999px;font-weight:500;color:var(--ink-2);border:1px solid var(--border);background:#fff}
+.onglet.actif{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ep{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--border)}
+.ep:last-child{border-bottom:0}
+.ep-num{width:44px;height:44px;border-radius:999px;display:grid;place-items:center;font-weight:500;background:var(--aqua-soft);color:var(--aqua-dark)}
+.ep-num.vide{background:#F3F0EC;color:#B08968}
+.ep b{font-weight:500;display:block;line-height:1.3}
+.ep-etat{font-size:13px;font-weight:300}
+.ep-ok{color:var(--aqua-dark)}
+.ep-manque{color:#B08968}
+.groupe{margin-bottom:30px}
+.groupe h3{font-size:17px;font-weight:600;margin:0 0 6px}
+.barre-envoi{height:5px;border-radius:999px;background:#E4EFEF;overflow:hidden;margin-top:8px}
+.barre-envoi i{display:block;height:100%;background:var(--aqua);width:0;transition:width .3s}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:13px 24px;border-radius:999px;font-size:14.5px;opacity:0;transition:.3s var(--ease);z-index:80;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:22px}
+.stat{background:#fff;border:1px solid var(--border);border-radius:20px;padding:18px 20px}
+.stat b{display:block;font-size:27px;font-weight:600;line-height:1.2}
+.stat span{font-size:13px;color:var(--ink-3);font-weight:300}
+@media(max-width:680px){
+  th:nth-child(4),td:nth-child(4){display:none}
+  .wrap{padding:20px 16px 60px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Verrou d'accès ===== -->
+<div class="voile ouvert" id="verrou">
+  <div class="modale" style="max-width:400px;text-align:center">
+    <div class="pastille" style="margin:0 auto 18px;width:52px;height:52px">🔑</div>
+    <h2 style="margin-bottom:8px">Espace thérapeute</h2>
+    <p class="doux" style="font-size:15px;margin-bottom:22px">Saisissez le code de votre centre.</p>
+    <input class="champ" id="code" type="password" inputmode="numeric" placeholder="Code d'accès" style="text-align:center;letter-spacing:.3em">
+    <button class="btn" style="width:100%" id="btn-entrer">Entrer</button>
+    <p class="mini" style="margin-top:14px">Code défini dans les variables Netlify.</p>
+  </div>
+</div>
+
+<div class="wrap" id="wrap" style="display:none">
+  <header class="top">
+    <div class="marque"><b>Mon parcours</b><span>by MAbeauty<i>plus</i> · espace thérapeute</span></div>
+    <button class="btn rose" id="btn-nouvelle">+ Ajouter une cliente</button>
+  </header>
+
+  <div class="onglets">
+    <button class="onglet actif" data-onglet="clientes">Clientes</button>
+    <button class="onglet" data-onglet="episodes">Épisodes</button>
+  </div>
+
+  <div id="vue-clientes">
+    <div class="stats" id="stats"></div>
+    <div class="carte">
+      <h2 style="margin-bottom:18px">Vos clientes</h2>
+      <div id="zone-table"><div class="vide"><p class="doux">Chargement…</p></div></div>
+    </div>
+  </div>
+
+  <div id="vue-episodes" hidden>
+    <div class="carte">
+      <h2 style="margin-bottom:6px">Épisodes</h2>
+      <p class="doux" style="font-size:15px;margin-bottom:20px">
+        Les fichiers audio sont déposés dans un espace privé. Une cliente ne peut jamais
+        télécharger un épisode qu'elle n'a pas débloqué.
+      </p>
+      <div id="zone-episodes"><div class="vide"><p class="doux">Chargement…</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Modale : nouvelle cliente ===== -->
+<div class="voile" id="modale-new">
+  <div class="modale">
+    <h2 style="margin-bottom:6px">Nouvelle cliente</h2>
+    <p class="doux" style="font-size:15px;margin-bottom:22px">Son accès est créé immédiatement, sans mot de passe.</p>
+    <div id="form-new">
+      <label for="f-prenom">Prénom</label>
+      <input class="champ" id="f-prenom" placeholder="Marie" autocomplete="off">
+      <label for="f-nom">Nom</label>
+      <input class="champ" id="f-nom" placeholder="Dupont" autocomplete="off">
+      <label for="f-tel">Téléphone <span style="font-weight:300;color:var(--ink-3)">— l'accès lui est envoyé par SMS</span></label>
+      <input class="champ" id="f-tel" placeholder="06 12 34 56 78" inputmode="tel" autocomplete="off">
+      <label>Parcours</label>
+      <div class="choix" id="choix-parcours"></div>
+      <button class="btn rose" style="width:100%" id="btn-creer">Créer l'accès</button>
+      <button class="btn clair" style="width:100%;margin-top:10px;box-shadow:none" data-fermer>Annuler</button>
+    </div>
+    <div id="resultat-new" style="display:none">
+      <div style="text-align:center;margin-bottom:6px;font-size:40px">✅</div>
+      <h2 style="text-align:center;margin-bottom:8px">Accès créé</h2>
+      <p class="doux" style="text-align:center;font-size:15px;margin-bottom:18px" id="etat-sms"></p>
+      <div class="lien-box"><code id="lien-new"></code></div>
+      <div class="actions">
+        <button class="btn clair" id="btn-copier-new">Copier le lien</button>
+        <a class="btn clair" id="btn-wa-new" href="#" target="_blank" rel="noopener">WhatsApp</a>
+      </div>
+      <button class="btn" style="width:100%;margin-top:16px" data-fermer>Terminer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Modale : fiche cliente ===== -->
+<div class="voile" id="modale-fiche">
+  <div class="modale" id="contenu-fiche"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   Espace thérapeute — Mon parcours by MAbeautyplus
+   Toutes les données passent par /api/admin. Aucune clé
+   Supabase ne se trouve dans cette page.
+   ========================================================= */
+
+const $ = (s) => document.querySelector(s);
+let code = null;
+let clientes = [];
+let parcours = [];
+let etapes = [];
+
+/* ------------------------------------------------------------ API --- */
+async function api(action, donnees = {}) {
+  const r = await fetch('/api/admin', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-mbp-code': code },
+    body: JSON.stringify({ action, ...donnees }),
+  });
+  const rep = await r.json().catch(() => ({}));
+  if (!r.ok) {
+    const e = new Error(rep.erreur || 'erreur');
+    e.code = rep.erreur;
+    e.statut = r.status;
+    e.donnees = rep;
+    throw e;
+  }
+  return rep;
+}
+
+/* ---------------------------------------------------- Utilitaires --- */
+function toast(m) {
+  const t = $('#toast');
+  t.textContent = m;
+  t.classList.add('on');
+  setTimeout(() => t.classList.remove('on'), 2600);
+}
+async function copier(txt) {
+  try {
+    await navigator.clipboard.writeText(txt);
+    toast('Lien copié');
+  } catch {
+    const a = document.createElement('textarea');
+    a.value = txt;
+    document.body.appendChild(a);
+    a.select();
+    try { document.execCommand('copy'); toast('Lien copié'); } catch { toast('Copie impossible'); }
+    a.remove();
+  }
+}
+function quand(iso) {
+  if (!iso) return 'Jamais ouvert';
+  const j = Math.floor((Date.now() - new Date(iso)) / 864e5);
+  if (j <= 0) return "Aujourd'hui";
+  if (j === 1) return 'Hier';
+  if (j < 7) return `Il y a ${j} j`;
+  return new Date(iso).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' });
+}
+const telAffiche = (t) => (t || '').replace(/^\+33/, '0').replace(/(\d{2})(?=\d)/g, '$1 ').trim();
+const telIntl = (t) => (t || '').replace(/\D/g, '');
+const pourcent = (c) => (c.total ? Math.round(c.terminees / c.total * 100) : 0);
+const msgAcces = (c) => `Bonjour ${c.prenom}, voici votre parcours audio MAbeautyplus : ${c.lien}`;
+
+/* ------------------------------------------------------- Clientes --- */
+async function chargerClientes() {
+  const rep = await api('liste');
+  clientes = rep.clientes;
+  rendreClientes();
+}
+
+function rendreClientes() {
+  const actives = clientes.filter((c) => c.statut === 'actif');
+  const recentes = clientes.filter(
+    (c) => c.derniereActivite && Date.now() - new Date(c.derniereActivite) < 7 * 864e5
+  );
+  $('#stats').innerHTML = `
+    <div class="stat"><b>${actives.length}</b><span>Accès actifs</span></div>
+    <div class="stat"><b>${recentes.length}</b><span>Écoutes cette semaine</span></div>
+    <div class="stat"><b>${clientes.reduce((s, c) => s + c.terminees, 0)}</b><span>Étapes terminées</span></div>`;
+
+  if (!clientes.length) {
+    $('#zone-table').innerHTML = `<div class="vide"><p class="doux">Aucune cliente pour le moment.</p>
+      <button class="btn rose" onclick="document.getElementById('btn-nouvelle').click()">Ajouter une cliente</button></div>`;
+    return;
+  }
+  $('#zone-table').innerHTML = `<table>
+    <thead><tr><th>Cliente</th><th>Parcours</th><th>Progression</th><th>Dernière écoute</th></tr></thead>
+    <tbody>${clientes.map((c) => `
+      <tr data-id="${c.id}">
+        <td><div class="qui"><div class="pastille">${c.prenom.charAt(0).toUpperCase()}</div>
+          <div><b>${c.prenom} ${c.nom || ''}</b><span class="mini">${telAffiche(c.telephone)}</span></div></div></td>
+        <td><span class="badge ${c.statut === 'suspendu' ? 'gris' : ''}">${c.parcoursNom}</span>
+            ${c.statut === 'suspendu' ? '<span class="badge gris">en pause</span>' : ''}</td>
+        <td><div class="jauge"><div class="barre"><i style="width:${pourcent(c)}%"></i></div>
+            <span>${c.terminees}/${c.total}</span></div></td>
+        <td class="doux" style="font-size:14.5px">${quand(c.derniereActivite)}</td>
+      </tr>`).join('')}</tbody></table>`;
+  document.querySelectorAll('tr[data-id]').forEach((tr) => {
+    tr.onclick = () => ouvrirFiche(tr.dataset.id);
+  });
+}
+
+function ouvrirFiche(id) {
+  const c = clientes.find((x) => x.id === id);
+  if (!c) return;
+  const enCours = Math.min(c.terminees + 1, c.total || 1);
+  $('#contenu-fiche').innerHTML = `
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+      <div class="pastille" style="width:52px;height:52px;font-size:20px">${c.prenom.charAt(0).toUpperCase()}</div>
+      <div><h2>${c.prenom} ${c.nom || ''}</h2><span class="mini">${telAffiche(c.telephone)}</span></div>
+    </div>
+    <div class="ligne-info"><span>Parcours</span><b>${c.parcoursNom}</b></div>
+    <div class="ligne-info"><span>Progression</span><b>${c.terminees} / ${c.total} étapes</b></div>
+    <div class="ligne-info"><span>Étape en cours</span><b>Étape ${enCours}</b></div>
+    <div class="ligne-info"><span>Dernière écoute</span><b>${quand(c.derniereActivite)}</b></div>
+    <div class="ligne-info"><span>Appareils</span><b>${c.appareils} / ${c.appareilsMax}</b></div>
+    <div class="ligne-info" style="border:0"><span>Statut</span><b>${c.statut === 'actif' ? 'Actif' : 'En pause'}</b></div>
+
+    <p style="margin:22px 0 0;font-size:13.5px;font-weight:500;color:var(--ink-2)">Lien d'accès personnel</p>
+    <div class="lien-box"><code>${c.lien}</code></div>
+    <div class="actions">
+      <button class="btn clair mini" data-act="copier">Copier le lien</button>
+      <button class="btn mini" data-act="sms">Renvoyer par SMS</button>
+      <a class="btn clair mini" target="_blank" rel="noopener"
+         href="https://wa.me/${telIntl(c.telephone)}?text=${encodeURIComponent(msgAcces(c))}">WhatsApp</a>
+      <a class="btn clair mini" target="_blank" rel="noopener" href="${c.lien}">Ouvrir</a>
+    </div>
+
+    <div style="height:1px;background:var(--border);margin:24px 0"></div>
+    <p style="font-size:13.5px;font-weight:500;color:var(--ink-2);margin:0 0 12px">Gérer l'accompagnement</p>
+    <div class="actions">
+      <button class="btn clair mini" data-act="valider">Valider l'étape en cours</button>
+      <button class="btn clair mini" data-act="parcours">Changer de parcours</button>
+      <button class="btn clair mini" data-act="appareils">Réinitialiser les appareils</button>
+      <button class="btn clair mini" data-act="statut">${c.statut === 'actif' ? "Mettre l'accès en pause" : "Réactiver l'accès"}</button>
+    </div>
+    <button class="btn clair" style="width:100%;margin-top:22px;box-shadow:none" data-fermer>Fermer</button>`;
+
+  $('#contenu-fiche').querySelectorAll('[data-act]').forEach((b) => {
+    b.onclick = () => action(b.dataset.act, c, b);
+  });
+  $('#contenu-fiche').querySelectorAll('[data-fermer]').forEach((b) => { b.onclick = fermerTout; });
+  $('#modale-fiche').classList.add('ouvert');
+}
+
+async function action(quoi, c, bouton) {
+  if (quoi === 'copier') return copier(c.lien);
+
+  const libelle = bouton.textContent;
+  bouton.disabled = true;
+  bouton.textContent = 'Un instant…';
+  try {
+    if (quoi === 'sms') {
+      const r = await api('renvoyer-lien', { id: c.id });
+      toast(r.sms?.envoye ? 'SMS envoyé à ' + c.prenom : "SMS non configuré, copiez le lien");
+    }
+    if (quoi === 'valider') {
+      const r = await api('valider-etape', { id: c.id });
+      toast(r.numero ? `Étape ${r.numero} validée` : 'Parcours déjà terminé');
+    }
+    if (quoi === 'statut') {
+      await api('modifier', { id: c.id, statut: c.statut === 'actif' ? 'suspendu' : 'actif' });
+      toast(c.statut === 'actif' ? 'Accès mis en pause' : 'Accès réactivé');
+    }
+    if (quoi === 'appareils') {
+      await api('modifier', { id: c.id, reinitialiserAppareils: true });
+      toast('Appareils réinitialisés');
+    }
+    if (quoi === 'parcours') {
+      const codes = parcours.map((p) => p.code);
+      const suivant = codes[(codes.indexOf(c.parcoursCode) + 1) % codes.length];
+      const nom = parcours.find((p) => p.code === suivant)?.nom_commercial || suivant;
+      if (!confirm(`Basculer ${c.prenom} sur le ${nom} ?\nSa progression sera remise à zéro.`)) {
+        bouton.disabled = false;
+        bouton.textContent = libelle;
+        return;
+      }
+      await api('modifier', { id: c.id, parcours: suivant });
+      toast('Parcours modifié');
+    }
+    await chargerClientes();
+    ouvrirFiche(c.id);
+  } catch (e) {
+    toast(e.code === 'code-invalide' ? 'Session expirée, rechargez la page' : 'Action impossible');
+    bouton.disabled = false;
+    bouton.textContent = libelle;
+  }
+}
+
+/* -------------------------------------------------- Nouvelle cliente --- */
+function rendreChoixParcours() {
+  $('#choix-parcours').innerHTML = parcours.map((p, k) => {
+    const n = etapes.filter((e) => e.parcours_code === p.code && e.actif).length;
+    return `<label><input type="radio" name="p" value="${p.code}" ${k === 0 ? 'checked' : ''}>
+      <span>${p.nom_commercial}<small>${n} étape${n > 1 ? 's' : ''}</small></span></label>`;
+  }).join('');
+}
+
+$('#btn-nouvelle').onclick = () => {
+  $('#form-new').style.display = '';
+  $('#resultat-new').style.display = 'none';
+  ['f-prenom', 'f-nom', 'f-tel'].forEach((i) => { $('#' + i).value = ''; });
+  $('#modale-new').classList.add('ouvert');
+  $('#f-prenom').focus();
+};
+
+async function creer(remplacer) {
+  const prenom = $('#f-prenom').value.trim();
+  const tel = $('#f-tel').value.trim();
+  if (!prenom) { $('#f-prenom').focus(); toast('Le prénom est nécessaire'); return; }
+  if (tel.replace(/\D/g, '').length < 9) { $('#f-tel').focus(); toast('Numéro de téléphone incomplet'); return; }
+
+  const bouton = $('#btn-creer');
+  bouton.disabled = true;
+  bouton.textContent = 'Création…';
+  try {
+    const rep = await api('creer', {
+      prenom,
+      nom: $('#f-nom').value.trim(),
+      telephone: tel,
+      parcours: document.querySelector('input[name=p]:checked').value,
+      remplacer: !!remplacer,
+    });
+    const lien = rep.cliente.lien;
+    $('#lien-new').textContent = lien;
+    $('#btn-copier-new').onclick = () => copier(lien);
+    const msg = encodeURIComponent(`Bonjour ${prenom}, voici votre parcours audio MAbeautyplus : ${lien}`);
+    $('#btn-wa-new').href = `https://wa.me/${telIntl(tel)}?text=${msg}`;
+    $('#etat-sms').textContent = rep.sms?.envoye
+      ? `Le SMS est parti sur le ${telAffiche(tel)}.`
+      : "SMS non envoyé : transmettez le lien par WhatsApp ou copiez-le.";
+    $('#form-new').style.display = 'none';
+    $('#resultat-new').style.display = '';
+    await chargerClientes();
+  } catch (e) {
+    if (e.code === 'numero-deja-actif') {
+      if (confirm(`Ce numéro est déjà utilisé par ${e.donnees.prenom || 'une cliente'}.\nMettre l'ancien accès en pause et créer le nouveau ?`)) {
+        bouton.disabled = false;
+        return creer(true);
+      }
+    } else {
+      toast(e.code === 'numero-invalide' ? 'Numéro de téléphone invalide' : 'Création impossible');
+    }
+  } finally {
+    bouton.disabled = false;
+    bouton.textContent = "Créer l'accès";
+  }
+}
+$('#btn-creer').onclick = () => creer(false);
+
+/* -------------------------------------------------------- Épisodes --- */
+async function chargerEpisodes() {
+  const rep = await api('parcours');
+  parcours = rep.parcours;
+  etapes = rep.etapes;
+  rendreChoixParcours();
+  rendreEpisodes();
+}
+
+function rendreEpisodes() {
+  $('#zone-episodes').innerHTML = parcours.map((p) => {
+    const liste = etapes.filter((e) => e.parcours_code === p.code).sort((a, b) => a.numero - b.numero);
+    const prets = liste.filter((e) => e.fichier && e.duree_sec).length;
+    return `<div class="groupe">
+      <h3>${p.nom_commercial}</h3>
+      <p class="mini" style="margin-bottom:10px">${prets} épisode${prets > 1 ? 's' : ''} prêt${prets > 1 ? 's' : ''} sur ${liste.length}</p>
+      ${liste.length ? liste.map((e) => `
+        <div class="ep" data-ep="${e.id}">
+          <div class="ep-num ${e.duree_sec ? '' : 'vide'}">${e.numero}</div>
+          <div>
+            <b>${e.titre}</b>
+            <span class="ep-etat ${e.duree_sec ? 'ep-ok' : 'ep-manque'}">
+              ${e.duree_sec ? `Audio en ligne · ${Math.round(e.duree_sec / 60)} min` : 'Audio à déposer'}
+            </span>
+            <div class="barre-envoi" hidden><i></i></div>
+          </div>
+          <button class="btn clair mini" data-envoi="${e.id}">${e.duree_sec ? 'Remplacer' : 'Déposer le MP3'}</button>
+        </div>`).join('') : '<p class="doux" style="font-size:15px">Aucune étape enregistrée pour ce parcours.</p>'}
+    </div>`;
+  }).join('');
+
+  document.querySelectorAll('[data-envoi]').forEach((b) => {
+    b.onclick = () => choisirFichier(b.dataset.envoi);
+  });
+}
+
+function choisirFichier(etapeId) {
+  const champ = document.createElement('input');
+  champ.type = 'file';
+  champ.accept = 'audio/mpeg,audio/mp4,.mp3,.m4a';
+  champ.onchange = () => { if (champ.files[0]) envoyerAudio(etapeId, champ.files[0]); };
+  champ.click();
+}
+
+async function envoyerAudio(etapeId, fichier) {
+  const etape = etapes.find((e) => e.id === etapeId);
+  const ligne = document.querySelector(`[data-ep="${etapeId}"]`);
+  const bouton = ligne.querySelector('[data-envoi]');
+  const jauge = ligne.querySelector('.barre-envoi');
+  const etat = ligne.querySelector('.ep-etat');
+
+  if (fichier.size > 100 * 1024 * 1024) { toast('Fichier trop lourd (100 Mo maximum)'); return; }
+
+  bouton.disabled = true;
+  bouton.textContent = 'Envoi…';
+  jauge.hidden = false;
+  jauge.querySelector('i').style.width = '15%';
+
+  try {
+    const ext = (fichier.name.split('.').pop() || 'mp3').toLowerCase();
+    const chemin = `${etape.parcours_code}/${etape.parcours_code}${String(etape.numero).padStart(2, '0')}-${Date.now()}.${ext}`;
+
+    const { url } = await api('url-envoi', { chemin });
+    jauge.querySelector('i').style.width = '35%';
+
+    const envoi = await fetch(url, {
+      method: 'PUT',
+      headers: { 'Content-Type': fichier.type || 'audio/mpeg' },
+      body: fichier,
+    });
+    if (!envoi.ok) throw new Error('envoi refusé : ' + envoi.status);
+    jauge.querySelector('i').style.width = '80%';
+
+    const duree = await dureeDuFichier(fichier);
+    await api('etape-maj', {
+      id: etapeId,
+      fichier: chemin,
+      dureeSec: duree,
+      dureeMin: Math.max(1, Math.round(duree / 60)),
+    });
+
+    jauge.querySelector('i').style.width = '100%';
+    etat.textContent = `Audio en ligne · ${Math.round(duree / 60)} min`;
+    etat.className = 'ep-etat ep-ok';
+    toast(`Étape ${etape.numero} en ligne`);
+    await chargerEpisodes();
+  } catch (e) {
+    console.error(e);
+    toast("L'envoi a échoué, réessayez");
+    bouton.disabled = false;
+    bouton.textContent = 'Déposer le MP3';
+    jauge.hidden = true;
+  }
+}
+
+/** Lit la durée réelle du MP3 dans le navigateur avant de l'enregistrer. */
+function dureeDuFichier(fichier) {
+  return new Promise((resolve) => {
+    const url = URL.createObjectURL(fichier);
+    const a = new Audio();
+    const finir = (v) => { URL.revokeObjectURL(url); resolve(v); };
+    a.onloadedmetadata = () => finir(Math.round(a.duration) || 0);
+    a.onerror = () => finir(0);
+    setTimeout(() => finir(Math.round(a.duration) || 0), 8000);
+    a.src = url;
+  });
+}
+
+/* ---------------------------------------------------------- Onglets --- */
+document.querySelectorAll('.onglet').forEach((b) => {
+  b.onclick = () => {
+    document.querySelectorAll('.onglet').forEach((x) => x.classList.toggle('actif', x === b));
+    $('#vue-clientes').hidden = b.dataset.onglet !== 'clientes';
+    $('#vue-episodes').hidden = b.dataset.onglet !== 'episodes';
+  };
+});
+
+/* --------------------------------------------------------- Modales --- */
+function fermerTout() {
+  document.querySelectorAll('.voile').forEach((v) => {
+    if (v.id !== 'verrou') v.classList.remove('ouvert');
+  });
+}
+document.querySelectorAll('[data-fermer]').forEach((b) => { b.onclick = fermerTout; });
+document.querySelectorAll('.voile').forEach((v) => {
+  v.addEventListener('click', (e) => { if (e.target === v && v.id !== 'verrou') fermerTout(); });
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') fermerTout(); });
+
+/* ---------------------------------------------------------- Verrou --- */
+async function entrer() {
+  const saisi = $('#code').value.trim();
+  if (!saisi) return;
+  const bouton = $('#btn-entrer');
+  bouton.disabled = true;
+  bouton.textContent = 'Vérification…';
+  code = saisi;
+  try {
+    await chargerEpisodes();
+    await chargerClientes();
+    try { sessionStorage.setItem('mbp_code', code); } catch { /* session non persistée */ }
+    $('#verrou').classList.remove('ouvert');
+    $('#wrap').style.display = '';
+  } catch (e) {
+    code = null;
+    $('#code').value = '';
+    $('#code').placeholder = e.code === 'code-invalide' ? 'Code incorrect' : 'Service indisponible';
+    $('#code').focus();
+  } finally {
+    bouton.disabled = false;
+    bouton.textContent = 'Entrer';
+  }
+}
+$('#btn-entrer').onclick = entrer;
+$('#code').addEventListener('keydown', (e) => { if (e.key === 'Enter') entrer(); });
+
+(async () => {
+  let memorise = null;
+  try { memorise = sessionStorage.getItem('mbp_code'); } catch { /* rien */ }
+  if (!memorise) return;
+  code = memorise;
+  try {
+    await chargerEpisodes();
+    await chargerClientes();
+    $('#verrou').classList.remove('ouvert');
+    $('#wrap').style.display = '';
+  } catch {
+    code = null;
+  }
+})();
+</script>
+</body>
+</html>

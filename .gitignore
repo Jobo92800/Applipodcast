@@ -1,0 +1,20 @@
+# Dépendances et outils
+node_modules/
+.netlify/
+.vscode/
+.idea/
+
+# Secrets : les clés vivent dans les variables Netlify, jamais ici
+.env
+.env.*
+*.pem
+
+# Fichiers audio : ils vivent dans le bucket Supabase, jamais dans Git
+*.mp3
+*.m4a
+*.aac
+*.wav
+
+# Système
+.DS_Store
+Thumbs.db

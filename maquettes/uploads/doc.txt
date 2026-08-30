@@ -1,0 +1,763 @@
+
+L'expérience cliente que je construirais
+
+À l'ouverture :
+
+Bonjour Marie 👋 Bienvenue dans votre parcours audio MAbeautyplus
+
+Puis quelque chose comme :
+
+Votre parcours 🎧 2 épisodes terminés sur 8 ██████░░░░ 25 %
+
+Et surtout un énorme bouton :
+
+▶ Continuer mon parcours
+
+Elle n'a quasiment rien à comprendre.
+
+Ensuite : les épisodes
+
+Imaginons une cliente sur ton deuxième palier.
+
+Elle voit :
+
+✅ 01 — Comprendre votre nouveau départ Écouté
+
+▶️ 02 — Votre corps commence à changer En cours · 14 min restantes
+
+🔒 03 — Comprendre les premières réactions
+
+🔒 04 — Installer les bonnes habitudes
+
+🔒 05 — ...
+
+etc.
+
+Il n'y a qu'un seul épisode disponible à la fois.
+
+C'est exactement ce que tu recherches : on accompagne la cliente dans un cheminement, au lieu de lui donner une bibliothèque de contenus qu'elle n'écoutera probablement jamais.
+
+Et je pousserais même ta logique un peu plus loin
+
+Je ne déverrouillerais pas forcément le suivant simplement lorsque le lecteur atteint 100 %.
+
+Sinon une cliente peut faire glisser la barre jusqu'à la fin.
+
+Je comptabiliserais réellement le temps écouté.
+
+Par exemple :
+
+Podcast suivant débloqué lorsqu'au moins 90 ou 95 % de l'épisode précédent a réellement été écouté.
+
+Elle peut évidemment :
+
+mettre pause ;
+
+fermer son téléphone ;
+
+revenir deux jours plus tard ;
+
+reprendre exactement à 12 min 34 ;
+
+écouter en plusieurs fois.
+
+C'est transparent pour elle.
+
+Le déblocage doit devenir une petite récompense
+
+À la fin de l'épisode :
+
+✨ petite animation
+
+Bravo Marie !
+
+Une nouvelle étape de votre parcours vient d'être franchie.
+
+Votre prochain épisode est maintenant disponible.
+
+Découvrir mon prochain épisode →
+
+Ça paraît anodin, mais cela change énormément la perception.
+
+On ne consomme plus un fichier MP3.
+
+On progresse dans son accompagnement MAbeautyplus.
+
+Et c'est précisément là que tu crées la valeur premium que tu recherches.
+
+Concernant tes 3 paliers
+
+Je ferais 3 parcours complètement indépendants techniquement.
+
+Pas :
+
+Podcast 1 mois Podcast 3 mois Podcast 6 mois
+
+Parce que tu viens justement de me dire que les durées peuvent encore évoluer.
+
+Dans le système, on pourrait simplement avoir :
+
+Parcours A Parcours B Parcours C
+
+Et dans l'interface cliente, leur donner plus tard de vrais noms marketing.
+
+Par exemple, uniquement pour illustrer :
+
+Essentiel Transformation Transformation+
+
+Mais je ne choisirais surtout pas encore les noms maintenant tant que ta nouvelle gamme de cures n'est pas définitivement verrouillée.
+
+Le gros avantage : demain tu peux transformer un programme de 3 mois en programme de 4 mois sans refaire l'application.
+
+Et tes fichiers audio restent totalement indépendants
+
+C'est important par rapport à ce que tu viens de m'expliquer.
+
+Même si :
+
+Palier 1 épisode 1 et Palier 2 épisode 1
+
+parlent quasiment de la même chose, ce sont bien deux contenus différents dans le système.
+
+Donc :
+
+Parcours A
+
+A01.mp3 A02.mp3 A03.mp3 A04.mp3
+
+Parcours B
+
+B01.mp3 B02.mp3 B03.mp3 B04.mp3 B05.mp3 etc.
+
+Parcours C
+
+C01.mp3 C02.mp3 C03.mp3...
+
+C'est beaucoup plus propre.
+
+Comment donner l'accès à la cliente
+
+Je pense que c'est le point le plus important de toute l'application.
+
+Je privilégierais le fonctionnement suivant.
+
+La thérapeute a une petite interface :
+
+Nouvelle cliente
+
+Prénom : Marie Téléphone : 06 XX XX XX XX XX
+
+Parcours :
+
+○ Parcours A ● Parcours B ○ Parcours C
+
+Activer le parcours
+
+Et c'est terminé.
+
+Le système génère un lien unique du style :
+
+podcast.mabeautyplus.fr/marie/xxxxxxxx
+
+La thérapeute peut cliquer :
+
+Envoyer l'accès
+
+et la cliente reçoit son lien.
+
+Je déconseille email + mot de passe
+
+Très clairement.
+
+Avec ton public, tu vas avoir :
+
+Je ne me rappelle plus mon mot de passe.
+
+Quelle adresse j'avais utilisée ?
+
+Ça me demande un code.
+
+Où est-ce que je dois cliquer ?
+
+Je n'arrive plus à me connecter.
+
+Et tes thérapeutes vont perdre du temps en SAV.
+
+Alors qu'un lien personnel permanent résout quasiment tout ça.
+
+Il faudra néanmoins sécuriser légèrement
+
+Parce qu'il ne faut pas non plus que Marie transmette son lien à ses cinq copines.
+
+Je ferais une sécurité invisible pour le client :
+
+Lien personnel sécurisé + mémorisation de l'appareil.
+
+Par exemple :
+
+1 ou 2 appareils autorisés maximum par cliente.
+
+Si quelqu'un utilise anormalement le lien ailleurs, on peut bloquer ou demander une petite vérification.
+
+Mais surtout pas une sécurité tellement forte qu'elle détériore l'expérience.
+
+Pour un podcast de cure, je préfère 98 % de simplicité et une protection raisonnable plutôt qu'un système bancaire.
+
+La page d'écoute
+
+Je la ferais vraiment premium.
+
+Pas juste :
+
+▶ AUDIO.MP3
+
+Mais plutôt :
+
+MAbeautyplus
+
+Votre parcours
+
+ÉPISODE 03
+
+Comprendre pourquoi votre corps peut résister au changement
+
+🎧 18 min
+
+Une belle illustration / couverture MAbeautyplus.
+
+Puis un gros lecteur :
+
+↺ 15 sec ⏸ ↻ 15 sec
+
+08:34 ━━━━━━━○━━━━ 18:12
+
+Puis :
+
+Prenez ce moment pour vous. Installez-vous au calme et avancez à votre rythme.
+
+Et en dessous :
+
+Votre progression
+
+2 épisodes terminés sur 10
+
+J'ajouterais une fonctionnalité toute simple mais très importante
+
+« Reprendre mon écoute »
+
+Quand elle revient dans l'application :
+
+elle ne retourne pas sur une bibliothèque.
+
+La première chose qu'elle voit est :
+
+Bonjour Sophie
+
+Vous étiez à 14:32 de votre épisode 4.
+
+▶ Reprendre mon écoute
+
+C'est le genre de détail qui donne immédiatement une impression de vraie application premium.
+
+Et côté thérapeute, je voudrais quelque chose de très simple également
+
+Elle pourrait voir :
+
+Cliente
+
+Parcours
+
+Progression
+
+Dernière écoute
+
+Marie
+
+B
+
+4/9
+
+hier
+
+Sophie
+
+A
+
+2/5
+
+aujourd'hui
+
+Caroline
+
+C
+
+1/14
+
+il y a 8 jours
+
+Et là, cela commence même à devenir intéressant dans l'accompagnement.
+
+La thérapeute peut dire pendant la séance :
+
+« J'ai vu que vous êtes arrivée au podcast 4. Comment l'avez-vous vécu ? »
+
+Ça donne soudainement énormément plus de valeur au podcast.
+
+Il devient une partie du suivi thérapeutique, pas un bonus gratuit ajouté à la cure.
+
+Il y a aussi quelque chose que je changerais dans le vocabulaire
+
+Je ne suis même pas certain que je présenterais ça aux clientes comme :
+
+“Vos podcasts”
+
+Ça réduit énormément la valeur perçue.
+
+Je présenterais plutôt :
+
+Votre parcours audio MAbeautyplus
+
+ou
+
+Votre accompagnement audio
+
+Puis à l'intérieur :
+
+Épisode 1 Épisode 2 Épisode 3
+
+Le mot podcast peut éventuellement apparaître dans certaines communications, mais je préfère largement :
+
+Votre parcours audio vous accompagne entre vos rendez-vous MAbeautyplus.
+
+Psychologiquement, ce n'est plus un catalogue de podcasts.
+
+C'est une composante de la méthode.
+
+Ma vision du produit
+
+Au départ, volontairement, je ne mettrais QUE ça :
+
+Accueil → Continuer mon parcours → Écouter → Débloquer → Progresser.
+
+Pas de recettes.
+
+Pas de boutique.
+
+Pas de questionnaire.
+
+Pas de chat.
+
+Pas de vidéos.
+
+Pas de 15 menus.
+
+Parce que sinon on ferait exactement l'erreur classique : transformer une excellente idée très simple en grosse application que personne ne comprend.
+
+Mais je construirais les fondations de manière à ce que demain, sans tout recommencer, on puisse faire :
+
+MAbeautyplus LIFE
+
+et rajouter progressivement nutrition, vidéos, questionnaires, challenges, suivi, etc.
+
+Donc mon choix serait celui-ci
+
+Une Progressive Web App / web-app mobile MAbeautyplus, hébergée par exemple sur :
+
+monparcours.mabeautyplus.fr
+
+avec :
+
+Accès par lien personnel sans mot de passe
+
+3 parcours indépendants
+
+Un seul épisode débloqué à la fois
+
+Déverrouillage après écoute réelle
+
+Reprise automatique là où la cliente s'était arrêtée
+
+Progression visuelle
+
+Petite récompense lors du déblocage
+
+Design très premium MAbeautyplus
+
+Interface thérapeute ultra-simple
+
+Architecture prête à évoluer plus tard vers MAbeautyplus LIFE
+
+Et surtout : aucune installation obligatoire.
+
+Pour moi, c'est le meilleur compromis entre simplicité pour une clientèle peu à l'aise avec le numérique et forte valeur perçue pour ta nouvelle stratégie MAbeautyplus.
+
+La prochaine étape intéressante, avant d'écrire une seule ligne de code, serait qu'on définisse ensemble l'expérience exacte écran par écran : ce que voit la cliente lorsqu'elle reçoit son accès, son accueil, le lecteur, le déblocage et son parcours. À ce moment-là, je peux te proposer une maquette fonctionnelle très précise sans encore construire l'app.
+
+Je construirais la V1 autour de 6 écrans seulement.
+
+1. Écran d’arrivée
+
+La cliente clique sur son lien reçu par WhatsApp/SMS et arrive directement ici :
+
+MAbeautyplus
+
+Bonjour Marie 👋
+
+Bienvenue dans votre parcours audio
+
+Ces épisodes ont été conçus pour vous accompagner progressivement tout au long de votre parcours MAbeautyplus.
+
+Avancez à votre rythme. Chaque nouvelle étape se débloquera automatiquement après la précédente.
+
+[ COMMENCER MON PARCOURS ]
+
+En petit :
+
+Votre progression est enregistrée automatiquement.
+
+Je ne lui demande rien : pas de mot de passe, pas de création de compte.
+
+2. Accueil principal
+
+Ensuite, à chaque fois qu'elle reviendra, c'est pratiquement le seul écran qu'elle verra.
+
+Bonjour Marie
+
+Votre parcours MAbeautyplus
+
+3 étapes terminées sur 10
+
+████████░░░░░░░ 30 %
+
+Puis une grosse carte centrale :
+
+ÉTAPE 4
+
+Comprendre les signaux de votre corps
+
+🎧 16 min
+
+Vous avez déjà écouté 06:34
+
+[ ▶ REPRENDRE MON ÉCOUTE ]
+
+Et juste dessous :
+
+Votre parcours
+
+✅ Étape 1 ✅ Étape 2 ✅ Étape 3 ▶ Étape 4 – En cours 🔒 Étape 5 🔒 Étape 6 🔒 Étape 7
+
+Mais je ne montrerais pas forcément les titres des épisodes verrouillés.
+
+On pourrait afficher :
+
+🔒 Votre prochaine étape
+
+Ça entretient davantage la curiosité.
+
+3. Écran d'écoute
+
+Quand elle clique :
+
+← Mon parcours
+
+ÉTAPE 4
+
+Comprendre les signaux de votre corps
+
+Une jolie illustration / cover très MAbeautyplus.
+
+Puis un gros player adapté aux personnes peu technophiles :
+
+↺ 15 sec ⏸ 15 sec ↻
+
+06:34 ━━━━━━━━━○━━━━━━ 16:08
+
+En dessous :
+
+41 % écouté
+
+Puis un petit message :
+
+Prenez ce moment pour vous. Vous pouvez interrompre votre écoute et revenir plus tard : votre progression sera conservée.
+
+Rien d'autre.
+
+Pas de menus partout.
+
+Pas de “playlist”, “bibliothèque”, “favoris”, etc.
+
+4. Fin d'un épisode
+
+C'est là que je veux créer la sensation d'avancement.
+
+Quand elle termine réellement l'écoute :
+
+✨ petite animation très légère
+
+Bravo Marie !
+
+Une nouvelle étape vient d'être franchie.
+
+Vous avancez dans votre parcours MAbeautyplus.
+
+🔓 Votre prochaine étape est maintenant disponible.
+
+[ DÉCOUVRIR LA PROCHAINE ÉTAPE ]
+
+Et éventuellement :
+
+4 / 10 étapes terminées
+
+██████████░░░░░
+
+Ça donne envie de continuer sans tomber dans le côté enfantin/gamification excessive.
+
+5. Écran du parcours
+
+Si elle veut voir où elle en est :
+
+Mon parcours
+
+Votre progression : 40 %
+
+✅ Étape 1 Votre point de départ Écouté
+
+✅ Étape 2 Comprendre votre changement Écouté
+
+✅ Étape 3 Les premières adaptations Écouté
+
+✅ Étape 4 Comprendre les signaux de votre corps Écouté
+
+▶ Étape 5 Disponible
+
+🔒 Étape 6 À venir
+
+🔒 Étape 7 À venir
+
+🔒 Étape 8 À venir
+
+Je mettrais aussi :
+
+Votre accompagnement se construit étape après étape. Il n'est pas nécessaire d'aller vite.
+
+Ça colle beaucoup mieux à MAbeautyplus qu'un mécanisme de consommation intensive de contenu.
+
+6. Écran “Mon espace”
+
+Celui-là doit être ultra-minimaliste.
+
+Marie D.
+
+Parcours : [nom commercial futur]
+
+Progression : 4 / 10
+
+Puis seulement :
+
+Besoin d'aide ? Contactez votre centre MAbeautyplus.
+
+Ajouter MAbeautyplus à mon écran d'accueil
+
+C'est tout.
+
+Navigation
+
+Je mettrais seulement 3 boutons en bas de l'écran :
+
+🏠 Accueil 🎧 Mon parcours 👤 Mon espace
+
+Rien d'autre.
+
+Même quelqu'un de 65-70 ans doit comprendre instantanément où cliquer.
+
+Et il y a une mécanique que je trouve très importante
+
+Quand une cliente revient après plusieurs jours, l'accueil pourrait dire :
+
+Bonjour Marie 👋
+
+Heureux de vous retrouver.
+
+Vous étiez à 08:42 de votre dernière écoute.
+
+▶ Reprendre
+
+Elle n'a jamais besoin de chercher.
+
+Maintenant le fonctionnement du verrouillage
+
+Je ferais une règle assez intelligente.
+
+L'épisode suivant se débloque lorsque la cliente a réellement écouté environ 90 % du contenu cumulé.
+
+Par exemple, podcast de 20 minutes :
+
+elle doit avoir réellement écouté environ 18 minutes.
+
+Elle peut :
+
+revenir en arrière ;
+
+mettre pause ;
+
+écouter en 4 fois ;
+
+fermer son navigateur ;
+
+verrouiller son téléphone.
+
+Tout est enregistré.
+
+Mais déplacer manuellement le curseur de 00:00 à 19:50 ne validerait pas l'épisode.
+
+Côté thérapeute
+
+Je ferais une deuxième interface, inaccessible aux clientes.
+
+Clients
+
+[ + Ajouter une cliente ]
+
+Cliente
+
+Parcours
+
+Progression
+
+Dernière activité
+
+Marie D.
+
+B
+
+4/10
+
+Aujourd'hui
+
+Sophie P.
+
+A
+
+2/6
+
+Hier
+
+Nathalie R.
+
+C
+
+7/14
+
+Il y a 5 j
+
+Quand la thérapeute clique sur Marie :
+
+Marie D.
+
+Parcours B
+
+4 / 10 étapes
+
+Dernière écoute : aujourd'hui 10:32
+
+Épisode actuel : étape 5
+
+Puis :
+
+Copier son lien d'accès
+
+Renvoyer l'accès
+
+Et éventuellement plus tard :
+
+Débloquer manuellement l'étape suivante
+
+Changer de parcours
+
+Suspendre l'accès
+
+Création d'une nouvelle cliente
+
+La thérapeute clique :
+
+Nouvelle cliente
+
+Prénom Marie
+
+Nom Dupont
+
+Téléphone 06 XX XX XX XX
+
+Sélectionner son parcours
+
+○ Parcours A ● Parcours B ○ Parcours C
+
+[ CRÉER L'ACCÈS ]
+
+Puis :
+
+✅ Accès créé
+
+[ Copier le lien ]
+
+ou éventuellement plus tard directement :
+
+[ Envoyer par SMS ] [ Envoyer par WhatsApp ]
+
+Et voilà comment je verrais la DA
+
+Je reprendrais complètement la nouvelle identité MAbeautyplus, mais en plus épurée que le site principal.
+
+Beaucoup de blanc.
+
+Rose MAbeautyplus très doux.
+
+Bleu MAbeautyplus.
+
+Formes arrondies.
+
+Cartes avec beaucoup d'espace.
+
+Gros textes lisibles.
+
+Icônes très simples.
+
+Animations lentes et élégantes.
+
+Surtout pas quelque chose qui ressemble à un espace médical ou à une plateforme de formation professionnelle.
+
+Je veux que ça donne :
+
+bien-être + premium + accompagnement + simplicité.
+
+Et sur le branding, je ferais un choix assez fort
+
+Je n'appellerais pas le produit :
+
+❌ Podcasts MAbeautyplus
+
+❌ Espace Podcasts
+
+❌ Podcast Minceur
+
+Je pourrais très bien appeler la plateforme :
+
+MON PARCOURS
+
+by MAbeautyplus
+
+Et lorsqu'on arrive :
+
+Votre parcours audio
+
+Ce qui permet demain de garder exactement MON PARCOURS et d'y ajouter autre chose que de l'audio.
+
+Aujourd'hui :
+
+🎧 Audio
+
+Demain :
+
+🎧 Audio 🥗 Nutrition 🎥 Vidéos 🧘 Bien-être 🏆 Challenges
+

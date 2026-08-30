@@ -1,0 +1,8 @@
+{
+  "name": "monparcours-mabeautyplus",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Parcours audio MAbeautyplus — application cliente et espace thérapeute",
+  "engines": { "node": ">=20" }
+}
