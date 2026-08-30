@@ -76,14 +76,28 @@ export const db = {
 
 /* --------------------------------------------------------------- Storage --- */
 
+/*
+  Les clés au format sb_secret_… ne sont pas des JWT. Sans l'en-tête apikey,
+  l'API Storage tente de décoder le Bearer comme un jeton et répond
+  « Invalid Compact JWS ». La fonction rest() ci-dessus envoie déjà les deux.
+*/
+const enTetesSupabase = () => ({
+  apikey: SERVICE_KEY,
+  Authorization: `Bearer ${SERVICE_KEY}`,
+  'Content-Type': 'application/json',
+});
+
 /** URL de lecture temporaire d'un fichier audio. */
 export async function urlSignee(chemin, secondes = 7200) {
   const r = await fetch(`${SUPABASE_URL}/storage/v1/object/sign/${BUCKET}/${chemin}`, {
     method: 'POST',
-    headers: { Authorization: `Bearer ${SERVICE_KEY}`, 'Content-Type': 'application/json' },
+    headers: enTetesSupabase(),
     body: JSON.stringify({ expiresIn: secondes }),
   });
-  if (!r.ok) throw new Error(`Signature refusée pour ${chemin} : ${r.status}`);
+  if (!r.ok) {
+    const detail = (await r.text()).slice(0, 200);
+    throw new Error(`Signature refusée pour ${chemin} : ${r.status} ${detail}`);
+  }
   const { signedURL } = await r.json();
   return `${SUPABASE_URL}/storage/v1${signedURL}`;
 }
@@ -95,11 +109,7 @@ export async function urlEnvoi(chemin) {
   // corps est rejeté par un 400.
   const r = await fetch(`${SUPABASE_URL}/storage/v1/object/upload/sign/${BUCKET}/${chemin}`, {
     method: 'POST',
-    headers: {
-      Authorization: `Bearer ${SERVICE_KEY}`,
-      'Content-Type': 'application/json',
-      'x-upsert': 'true',
-    },
+    headers: { ...enTetesSupabase(), 'x-upsert': 'true' },
     body: JSON.stringify({}),
   });
   if (!r.ok) {
