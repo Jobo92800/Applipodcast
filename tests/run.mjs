@@ -84,7 +84,14 @@ p('sendBeacon accepté sans en-tête', r.statut===200 && r.taux>0.33 && r.taux<0
 r = await post('parcours',{appareil:'ap2'},auth(acces));
 p('couverture rendue pour reprise', !!r.etapes[1].couverture);
 r = await post('parcours',{appareil:'ap3'},auth(acces));
-p('3e appareil refusé', r.statut===403 && r.erreur==='trop-appareils');
+p('3e appareil accepté', r.statut===200);
+r = await post('parcours',{appareil:'ap4'},auth(acces));
+p('4e appareil accepté', r.statut===200);
+r = await post('parcours',{appareil:'ap5'},auth(acces));
+p('5e appareil accepté au lieu d\'être bloqué', r.statut===200);
+const fiches = await post('admin',{action:'liste'},ADMIN);
+const fiche = fiches.clientes.find((x) => x.email==='marie@exemple.fr');
+p('le plus ancien appareil est libéré', fiche.appareils===4);
 
 // --- mot de passe oublié ---
 r = await post('session',{action:'oubli',email:'marie@exemple.fr'});

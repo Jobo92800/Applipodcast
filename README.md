@@ -47,8 +47,9 @@ le curseur jusqu'à la fin ne coche rien.
 
 Seuil par défaut : 90 % du contenu, réglable par la variable `SEUIL_DEBLOCAGE`.
 
-La progression suit la cliente d'un appareil à l'autre. Deux appareils maximum,
-réinitialisables par la thérapeute.
+La progression suit la cliente d'un appareil à l'autre. Quatre appareils, et au-delà
+c'est le plus ancien qui laisse sa place plutôt que la cliente qui reste dehors.
+Réinitialisables par la thérapeute.
 
 ## L'identification
 

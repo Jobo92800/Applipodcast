@@ -121,7 +121,11 @@ La session se rafraîchit toute seule, donc en pratique elle ne retape son mot d
 que si elle change d'appareil ou vide son navigateur. En cas d'oubli, un lien de
 réinitialisation part par e-mail en un clic, sans intervention du centre.
 
-Deux appareils maximum par cliente, réinitialisables depuis sa fiche.
+Quatre appareils par cliente : téléphone, tablette, ordinateur, avec de la marge.
+Au-delà, elle n'est jamais bloquée — c'est l'appareil le plus anciennement utilisé
+qui laisse sa place. Un accès réellement partagé finit donc par déconnecter ses
+utilisateurs les uns après les autres. La liste est réinitialisable depuis sa fiche,
+et le nombre se règle par la variable `APPAREILS_MAX`.
 
 ### Le déblocage
 

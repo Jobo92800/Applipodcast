@@ -11,7 +11,7 @@ export const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 export const ADMIN_CODE = process.env.ADMIN_CODE;
 export const SITE_URL = process.env.SITE_URL || 'https://monparcours.mabeautyplus.fr';
 export const SEUIL = Number(process.env.SEUIL_DEBLOCAGE || 0.9);
-export const APPAREILS_MAX = Number(process.env.APPAREILS_MAX || 2);
+export const APPAREILS_MAX = Number(process.env.APPAREILS_MAX || 4);
 export const BUCKET = 'parcours-audio';
 
 export const json = (status, payload) =>
@@ -287,9 +287,15 @@ export async function clienteParSession(req, empreinte, jetonSecours) {
     const connu = appareils.find((a) => a.empreinte === empreinte);
     if (connu) {
       await db.majSur('appareils', `id=eq.${connu.id}`, { derniere_vue: new Date().toISOString() });
-    } else if (appareils.length >= APPAREILS_MAX) {
-      return { erreur: 'trop-appareils', statut: 403 };
     } else {
+      // Limite atteinte : on libère la place du plus ancien appareil au lieu de
+      // fermer la porte. Une cliente qui passe du téléphone à la tablette puis à
+      // l'ordinateur n'est jamais bloquée ; un accès réellement partagé, lui,
+      // déconnecte ses utilisateurs les uns après les autres.
+      if (appareils.length >= APPAREILS_MAX) {
+        const plusAncien = appareils.reduce((a, b) => (a.derniere_vue <= b.derniere_vue ? a : b));
+        await db.supprimer('appareils', `id=eq.${plusAncien.id}`);
+      }
       await db.creer('appareils', {
         cliente_id: cliente.id,
         empreinte,
