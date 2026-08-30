@@ -6,8 +6,8 @@
   ce qui n'est pas encore débloqué n'existe pas côté client.
 */
 import {
-  json, configManquante, corpsJson, db, clienteParJeton,
-  tauxCouverture, journaliser, ipDe, SEUIL,
+  json, configManquante, corpsJson, db, clienteParSession,
+  journaliser, ipDe, SEUIL,
 } from '../lib/core.js';
 
 export default async (req) => {
@@ -15,17 +15,12 @@ export default async (req) => {
   const manque = configManquante();
   if (manque) return manque;
 
-  const corps = await corpsJson(req);
-  if (!corps) return json(400, { erreur: 'Requête invalide.' });
+  const corps = (await corpsJson(req)) || {};
 
   try {
-    const { cliente, erreur, statut } = await clienteParJeton(
-      corps.jeton,
-      corps.appareil,
-      req.headers.get('user-agent')
-    );
+    const { cliente, erreur, statut } = await clienteParSession(req, corps.appareil);
     if (erreur) {
-      await journaliser(erreur, { ip: ipDe(req), detail: String(corps.jeton || '').slice(0, 40) });
+      if (erreur !== 'session-expiree') await journaliser(erreur, { ip: ipDe(req) });
       return json(statut, { erreur });
     }
 

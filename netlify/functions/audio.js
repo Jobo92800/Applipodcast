@@ -7,7 +7,7 @@
   au-delà, donc il ne circule pas durablement.
 */
 import {
-  json, configManquante, corpsJson, db, clienteParJeton,
+  json, configManquante, corpsJson, db, clienteParSession,
   urlSignee, journaliser, ipDe,
 } from '../lib/core.js';
 
@@ -25,11 +25,7 @@ export default async (req) => {
   if (!Number.isInteger(numero) || numero < 1) return json(400, { erreur: 'Étape inconnue.' });
 
   try {
-    const { cliente, erreur, statut } = await clienteParJeton(
-      corps.jeton,
-      corps.appareil,
-      req.headers.get('user-agent')
-    );
+    const { cliente, erreur, statut } = await clienteParSession(req, corps.appareil);
     if (erreur) return json(statut, { erreur });
 
     const etapes = await db.lire(

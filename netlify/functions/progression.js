@@ -10,7 +10,7 @@
   inconnue, on retient celle du navigateur et on la fige pour les envois suivants.
 */
 import {
-  json, configManquante, corpsJson, db, clienteParJeton,
+  json, configManquante, corpsJson, db, clienteParSession,
   tauxCouverture, SEUIL,
 } from '../lib/core.js';
 
@@ -30,11 +30,7 @@ export default async (req) => {
   if (!Number.isInteger(numero) || numero < 1) return json(400, { erreur: 'Étape inconnue.' });
 
   try {
-    const { cliente, erreur, statut } = await clienteParJeton(
-      corps.jeton,
-      corps.appareil,
-      req.headers.get('user-agent')
-    );
+    const { cliente, erreur, statut } = await clienteParSession(req, corps.appareil, corps.acces);
     if (erreur) return json(statut, { erreur });
 
     const etape = await db.un(

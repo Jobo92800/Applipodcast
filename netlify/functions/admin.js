@@ -6,12 +6,34 @@
   /admin par le mot de passe de site Netlify.
 */
 import {
-  json, configManquante, corpsJson, db, ADMIN_CODE, APPAREILS_MAX,
-  nouveauJeton, normaliserTel, lienCliente, envoyerSms, urlEnvoi,
-  journaliser, ipDe,
+  json, configManquante, corpsJson, db, auth, ADMIN_CODE, APPAREILS_MAX,
+  normaliserTel, urlEnvoi, journaliser, ipDe, SITE_URL,
 } from '../lib/core.js';
 
 const ok = (donnees) => json(200, { ok: true, ...donnees });
+const nettoyerEmail = (v) => String(v || '').trim().toLowerCase();
+const emailValide = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+
+/** Envoie l'e-mail d'invitation qui permet de choisir son mot de passe. */
+async function inviter(email, prenom) {
+  const r = await auth(`/invite?redirect_to=${encodeURIComponent(SITE_URL)}`, {
+    method: 'POST',
+    body: JSON.stringify({ email, data: { prenom } }),
+  });
+  if (r.ok) return { envoye: true, utilisateur: r.corps };
+
+  const message = String(r.corps?.msg || r.corps?.error_description || r.corps?.message || '');
+  // Compte déjà existant : on bascule sur un e-mail de réinitialisation.
+  if (/already been registered|already exists|User already/i.test(message)) {
+    const secours = await auth(`/recover?redirect_to=${encodeURIComponent(SITE_URL)}`, {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    });
+    return { envoye: secours.ok, deja: true, raison: secours.ok ? null : 'email-refuse' };
+  }
+  console.error('Invitation refusée :', r.statut, message);
+  return { envoye: false, raison: 'email-refuse', detail: message.slice(0, 160) };
+}
 
 export default async (req) => {
   if (req.method !== 'POST') return json(405, { erreur: 'Méthode non autorisée.' });
@@ -46,64 +68,70 @@ export default async (req) => {
         return ok({
           clientes: clientes.map((c) => ({
             id: c.id,
-            jeton: c.jeton,
             prenom: c.prenom,
             nom: c.nom,
+            email: c.email,
             telephone: c.telephone,
             centre: c.centre,
             parcoursCode: c.parcours_code,
             parcoursNom: c.parcours?.nom_commercial || c.parcours_code,
             statut: c.statut,
+            compteActive: !!c.auth_user_id,
             terminees: (c.progression || []).filter((p) => p.terminee).length,
             total: totaux[c.parcours_code] || 0,
             appareils: (c.appareils || []).length,
             appareilsMax: APPAREILS_MAX,
             derniereActivite: c.derniere_activite,
-            lien: lienCliente(c),
           })),
+          lienSite: SITE_URL.replace(/\/$/, ''),
         });
       }
 
       case 'creer': {
         const prenom = (corps.prenom || '').trim();
-        const tel = normaliserTel(corps.telephone);
+        const email = nettoyerEmail(corps.email);
         if (!prenom) return json(400, { erreur: 'prenom-requis' });
-        if (!tel) return json(400, { erreur: 'numero-invalide' });
+        if (!emailValide(email)) return json(400, { erreur: 'email-invalide' });
 
         const parcoursCode = (corps.parcours || 'A').toUpperCase();
         const parcours = await db.un('parcours', `select=code&code=eq.${parcoursCode}`);
         if (!parcours) return json(400, { erreur: 'parcours-inconnu' });
 
-        const actuelle = await db.un(
+        const existante = await db.un(
           'clientes',
-          `select=id,prenom&telephone=eq.${encodeURIComponent(tel)}&statut=eq.actif`
+          `select=id,prenom,statut&email=eq.${encodeURIComponent(email)}`
         );
-        if (actuelle && !corps.remplacer) {
-          return json(409, { erreur: 'numero-deja-actif', prenom: actuelle.prenom });
+        if (existante) {
+          return json(409, { erreur: 'email-deja-utilise', prenom: existante.prenom });
         }
-        if (actuelle) {
-          await db.majSur('clientes', `id=eq.${actuelle.id}`, { statut: 'suspendu' });
-        }
+
+        const invitation = await inviter(email, prenom);
 
         const [cliente] = await db.creer('clientes', {
-          jeton: nouveauJeton(),
           prenom,
           nom: (corps.nom || '').trim() || null,
-          telephone: tel,
+          email,
+          telephone: normaliserTel(corps.telephone),
           centre: corps.centre || null,
           parcours_code: parcoursCode,
+          auth_user_id: invitation.utilisateur?.id || null,
         });
 
-        const lien = lienCliente(cliente);
-        let sms = { envoye: false };
-        if (corps.envoyerSms !== false) {
-          sms = await envoyerSms(
-            tel,
-            `Bonjour ${prenom}, voici votre parcours audio MAbeautyplus : ${lien}`
-          );
+        await journaliser('cliente-creee', { clienteId: cliente.id, ip: ipDe(req), detail: email });
+        return ok({ cliente: { id: cliente.id, prenom, email }, invitation });
+      }
+
+      case 'renvoyer-invitation': {
+        const cliente = await db.un('clientes', `select=*&id=eq.${corps.id}`);
+        if (!cliente) return json(404, { erreur: 'cliente-inconnue' });
+        const invitation = await inviter(cliente.email, cliente.prenom);
+        if (invitation.utilisateur?.id && !cliente.auth_user_id) {
+          await db.majSur('clientes', `id=eq.${cliente.id}`, {
+            auth_user_id: invitation.utilisateur.id,
+          });
         }
-        await journaliser('cliente-creee', { clienteId: cliente.id, ip: ipDe(req) });
-        return ok({ cliente: { id: cliente.id, prenom, lien }, sms });
+        await journaliser('invitation-renvoyee', { clienteId: cliente.id, ip: ipDe(req) });
+        return ok({ invitation });
       }
 
       case 'modifier': {
@@ -112,6 +140,7 @@ export default async (req) => {
         const champs = {};
 
         if (corps.statut) champs.statut = corps.statut === 'actif' ? 'actif' : 'suspendu';
+        if (corps.telephone !== undefined) champs.telephone = normaliserTel(corps.telephone);
         if (corps.debloqueManuel != null) {
           champs.debloque_manuel = Math.max(0, Math.floor(Number(corps.debloqueManuel)));
         }
@@ -128,7 +157,6 @@ export default async (req) => {
       }
 
       case 'valider-etape': {
-        // Débloque manuellement l'étape suivante, sans passer par l'écoute.
         const cliente = await db.un('clientes', `select=*&id=eq.${corps.id}`);
         if (!cliente) return json(404, { erreur: 'cliente-inconnue' });
 
@@ -162,23 +190,10 @@ export default async (req) => {
         return ok({ numero: etape.numero });
       }
 
-      case 'renvoyer-lien': {
-        const cliente = await db.un('clientes', `select=*&id=eq.${corps.id}`);
-        if (!cliente) return json(404, { erreur: 'cliente-inconnue' });
-        const sms = await envoyerSms(
-          cliente.telephone,
-          `Bonjour ${cliente.prenom}, voici votre parcours audio MAbeautyplus : ${lienCliente(cliente)}`
-        );
-        return ok({ sms });
-      }
-
       /* --------------------------------------------------------- étapes --- */
       case 'parcours': {
         const parcours = await db.lire('parcours', 'select=*&order=ordre.asc');
-        const etapes = await db.lire(
-          'etapes',
-          'select=*&order=parcours_code.asc,numero.asc'
-        );
+        const etapes = await db.lire('etapes', 'select=*&order=parcours_code.asc,numero.asc');
         return ok({ parcours, etapes });
       }
 
@@ -212,7 +227,6 @@ export default async (req) => {
       }
 
       case 'url-envoi': {
-        // Renvoie une adresse temporaire pour déposer un MP3 dans le bucket privé.
         const chemin = String(corps.chemin || '').replace(/[^A-Za-z0-9/._-]/g, '');
         if (!/^[A-C]\/[A-Za-z0-9._-]+\.(mp3|m4a|aac|wav)$/i.test(chemin)) {
           return json(400, { erreur: 'chemin-invalide' });

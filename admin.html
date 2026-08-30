@@ -150,13 +150,15 @@ label{display:block;font-size:13.5px;font-weight:500;margin:0 0 6px;color:var(--
 <div class="voile" id="modale-new">
   <div class="modale">
     <h2 style="margin-bottom:6px">Nouvelle cliente</h2>
-    <p class="doux" style="font-size:15px;margin-bottom:22px">Son accès est créé immédiatement, sans mot de passe.</p>
+    <p class="doux" style="font-size:15px;margin-bottom:22px">Elle reçoit un e-mail d'invitation pour choisir son mot de passe.</p>
     <div id="form-new">
       <label for="f-prenom">Prénom</label>
       <input class="champ" id="f-prenom" placeholder="Marie" autocomplete="off">
       <label for="f-nom">Nom</label>
       <input class="champ" id="f-nom" placeholder="Dupont" autocomplete="off">
-      <label for="f-tel">Téléphone <span style="font-weight:300;color:var(--ink-3)">— l'accès lui est envoyé par SMS</span></label>
+      <label for="f-email">Adresse e-mail <span style="font-weight:300;color:var(--ink-3)">— son invitation y sera envoyée</span></label>
+      <input class="champ" id="f-email" type="email" placeholder="marie@exemple.fr" inputmode="email" autocomplete="off">
+      <label for="f-tel">Téléphone <span style="font-weight:300;color:var(--ink-3)">— pour le centre, facultatif</span></label>
       <input class="champ" id="f-tel" placeholder="06 12 34 56 78" inputmode="tel" autocomplete="off">
       <label>Parcours</label>
       <div class="choix" id="choix-parcours"></div>
@@ -165,14 +167,11 @@ label{display:block;font-size:13.5px;font-weight:500;margin:0 0 6px;color:var(--
     </div>
     <div id="resultat-new" style="display:none">
       <div style="text-align:center;margin-bottom:6px;font-size:40px">✅</div>
-      <h2 style="text-align:center;margin-bottom:8px">Accès créé</h2>
-      <p class="doux" style="text-align:center;font-size:15px;margin-bottom:18px" id="etat-sms"></p>
+      <h2 style="text-align:center;margin-bottom:8px">Compte créé</h2>
+      <p class="doux" style="text-align:center;font-size:15px;margin-bottom:18px" id="etat-mail"></p>
       <div class="lien-box"><code id="lien-new"></code></div>
-      <div class="actions">
-        <button class="btn clair" id="btn-copier-new">Copier le lien</button>
-        <a class="btn clair" id="btn-wa-new" href="#" target="_blank" rel="noopener">WhatsApp</a>
-      </div>
-      <button class="btn" style="width:100%;margin-top:16px" data-fermer>Terminer</button>
+      <p class="mini" style="text-align:center">Adresse à laquelle elle se connectera.</p>
+      <button class="btn" style="width:100%;margin-top:18px" data-fermer>Terminer</button>
     </div>
   </div>
 </div>
@@ -244,14 +243,14 @@ function quand(iso) {
   return new Date(iso).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' });
 }
 const telAffiche = (t) => (t || '').replace(/^\+33/, '0').replace(/(\d{2})(?=\d)/g, '$1 ').trim();
-const telIntl = (t) => (t || '').replace(/\D/g, '');
 const pourcent = (c) => (c.total ? Math.round(c.terminees / c.total * 100) : 0);
-const msgAcces = (c) => `Bonjour ${c.prenom}, voici votre parcours audio MAbeautyplus : ${c.lien}`;
+let lienSite = '';
 
 /* ------------------------------------------------------- Clientes --- */
 async function chargerClientes() {
   const rep = await api('liste');
   clientes = rep.clientes;
+  lienSite = rep.lienSite || '';
   rendreClientes();
 }
 
@@ -275,9 +274,10 @@ function rendreClientes() {
     <tbody>${clientes.map((c) => `
       <tr data-id="${c.id}">
         <td><div class="qui"><div class="pastille">${c.prenom.charAt(0).toUpperCase()}</div>
-          <div><b>${c.prenom} ${c.nom || ''}</b><span class="mini">${telAffiche(c.telephone)}</span></div></div></td>
+          <div><b>${c.prenom} ${c.nom || ''}</b><span class="mini">${c.email}</span></div></div></td>
         <td><span class="badge ${c.statut === 'suspendu' ? 'gris' : ''}">${c.parcoursNom}</span>
-            ${c.statut === 'suspendu' ? '<span class="badge gris">en pause</span>' : ''}</td>
+            ${c.statut === 'suspendu' ? '<span class="badge gris">en pause</span>' : ''}
+            ${c.compteActive ? '' : '<span class="badge rose">invitation en attente</span>'}</td>
         <td><div class="jauge"><div class="barre"><i style="width:${pourcent(c)}%"></i></div>
             <span>${c.terminees}/${c.total}</span></div></td>
         <td class="doux" style="font-size:14.5px">${quand(c.derniereActivite)}</td>
@@ -294,8 +294,10 @@ function ouvrirFiche(id) {
   $('#contenu-fiche').innerHTML = `
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
       <div class="pastille" style="width:52px;height:52px;font-size:20px">${c.prenom.charAt(0).toUpperCase()}</div>
-      <div><h2>${c.prenom} ${c.nom || ''}</h2><span class="mini">${telAffiche(c.telephone)}</span></div>
+      <div><h2>${c.prenom} ${c.nom || ''}</h2><span class="mini">${c.email}</span></div>
     </div>
+    <div class="ligne-info"><span>Compte</span><b>${c.compteActive ? 'Actif' : 'Invitation en attente'}</b></div>
+    <div class="ligne-info"><span>Téléphone</span><b>${telAffiche(c.telephone) || '—'}</b></div>
     <div class="ligne-info"><span>Parcours</span><b>${c.parcoursNom}</b></div>
     <div class="ligne-info"><span>Progression</span><b>${c.terminees} / ${c.total} étapes</b></div>
     <div class="ligne-info"><span>Étape en cours</span><b>Étape ${enCours}</b></div>
@@ -303,14 +305,12 @@ function ouvrirFiche(id) {
     <div class="ligne-info"><span>Appareils</span><b>${c.appareils} / ${c.appareilsMax}</b></div>
     <div class="ligne-info" style="border:0"><span>Statut</span><b>${c.statut === 'actif' ? 'Actif' : 'En pause'}</b></div>
 
-    <p style="margin:22px 0 0;font-size:13.5px;font-weight:500;color:var(--ink-2)">Lien d'accès personnel</p>
-    <div class="lien-box"><code>${c.lien}</code></div>
+    <p style="margin:22px 0 0;font-size:13.5px;font-weight:500;color:var(--ink-2)">Adresse de connexion</p>
+    <div class="lien-box"><code>${lienSite}</code></div>
     <div class="actions">
-      <button class="btn clair mini" data-act="copier">Copier le lien</button>
-      <button class="btn mini" data-act="sms">Renvoyer par SMS</button>
-      <a class="btn clair mini" target="_blank" rel="noopener"
-         href="https://wa.me/${telIntl(c.telephone)}?text=${encodeURIComponent(msgAcces(c))}">WhatsApp</a>
-      <a class="btn clair mini" target="_blank" rel="noopener" href="${c.lien}">Ouvrir</a>
+      <button class="btn mini" data-act="invitation">${c.compteActive ? 'Renvoyer un lien de connexion' : "Renvoyer l'invitation"}</button>
+      <button class="btn clair mini" data-act="copier">Copier l'adresse</button>
+      <a class="btn clair mini" target="_blank" rel="noopener" href="${lienSite}">Ouvrir</a>
     </div>
 
     <div style="height:1px;background:var(--border);margin:24px 0"></div>
@@ -331,15 +331,17 @@ function ouvrirFiche(id) {
 }
 
 async function action(quoi, c, bouton) {
-  if (quoi === 'copier') return copier(c.lien);
+  if (quoi === 'copier') return copier(lienSite);
 
   const libelle = bouton.textContent;
   bouton.disabled = true;
   bouton.textContent = 'Un instant…';
   try {
-    if (quoi === 'sms') {
-      const r = await api('renvoyer-lien', { id: c.id });
-      toast(r.sms?.envoye ? 'SMS envoyé à ' + c.prenom : "SMS non configuré, copiez le lien");
+    if (quoi === 'invitation') {
+      const r = await api('renvoyer-invitation', { id: c.id });
+      toast(r.invitation?.envoye
+        ? 'E-mail envoyé à ' + c.email
+        : "L'e-mail n'a pas pu partir, vérifiez la configuration SMTP");
     }
     if (quoi === 'valider') {
       const r = await api('valider-etape', { id: c.id });
@@ -386,16 +388,20 @@ function rendreChoixParcours() {
 $('#btn-nouvelle').onclick = () => {
   $('#form-new').style.display = '';
   $('#resultat-new').style.display = 'none';
-  ['f-prenom', 'f-nom', 'f-tel'].forEach((i) => { $('#' + i).value = ''; });
+  ['f-prenom', 'f-nom', 'f-email', 'f-tel'].forEach((i) => { $('#' + i).value = ''; });
   $('#modale-new').classList.add('ouvert');
   $('#f-prenom').focus();
 };
 
-async function creer(remplacer) {
+async function creer() {
   const prenom = $('#f-prenom').value.trim();
-  const tel = $('#f-tel').value.trim();
+  const email = $('#f-email').value.trim().toLowerCase();
   if (!prenom) { $('#f-prenom').focus(); toast('Le prénom est nécessaire'); return; }
-  if (tel.replace(/\D/g, '').length < 9) { $('#f-tel').focus(); toast('Numéro de téléphone incomplet'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+    $('#f-email').focus();
+    toast('Adresse e-mail invalide');
+    return;
+  }
 
   const bouton = $('#btn-creer');
   bouton.disabled = true;
@@ -404,36 +410,30 @@ async function creer(remplacer) {
     const rep = await api('creer', {
       prenom,
       nom: $('#f-nom').value.trim(),
-      telephone: tel,
+      email,
+      telephone: $('#f-tel').value.trim(),
       parcours: document.querySelector('input[name=p]:checked').value,
-      remplacer: !!remplacer,
     });
-    const lien = rep.cliente.lien;
-    $('#lien-new').textContent = lien;
-    $('#btn-copier-new').onclick = () => copier(lien);
-    const msg = encodeURIComponent(`Bonjour ${prenom}, voici votre parcours audio MAbeautyplus : ${lien}`);
-    $('#btn-wa-new').href = `https://wa.me/${telIntl(tel)}?text=${msg}`;
-    $('#etat-sms').textContent = rep.sms?.envoye
-      ? `Le SMS est parti sur le ${telAffiche(tel)}.`
-      : "SMS non envoyé : transmettez le lien par WhatsApp ou copiez-le.";
+    $('#lien-new').textContent = lienSite;
+    $('#etat-mail').textContent = rep.invitation?.envoye
+      ? `L'invitation est partie sur ${email}. Demandez-lui de vérifier ses courriers indésirables.`
+      : "L'e-mail n'a pas pu partir. Vérifiez la configuration SMTP dans Supabase, puis renvoyez l'invitation depuis sa fiche.";
     $('#form-new').style.display = 'none';
     $('#resultat-new').style.display = '';
     await chargerClientes();
   } catch (e) {
-    if (e.code === 'numero-deja-actif') {
-      if (confirm(`Ce numéro est déjà utilisé par ${e.donnees.prenom || 'une cliente'}.\nMettre l'ancien accès en pause et créer le nouveau ?`)) {
-        bouton.disabled = false;
-        return creer(true);
-      }
-    } else {
-      toast(e.code === 'numero-invalide' ? 'Numéro de téléphone invalide' : 'Création impossible');
-    }
+    const messages = {
+      'email-deja-utilise': `Cette adresse est déjà utilisée par ${e.donnees.prenom || 'une cliente'}.`,
+      'email-invalide': 'Adresse e-mail invalide',
+      'prenom-requis': 'Le prénom est nécessaire',
+    };
+    toast(messages[e.code] || 'Création impossible');
   } finally {
     bouton.disabled = false;
     bouton.textContent = "Créer l'accès";
   }
 }
-$('#btn-creer').onclick = () => creer(false);
+$('#btn-creer').onclick = () => creer();
 
 /* -------------------------------------------------------- Épisodes --- */
 async function chargerEpisodes() {

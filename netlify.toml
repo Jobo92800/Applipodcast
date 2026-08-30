@@ -19,8 +19,8 @@
   to = "/.netlify/functions/progression"
   status = 200
 [[redirects]]
-  from = "/api/acces"
-  to = "/.netlify/functions/acces"
+  from = "/api/session"
+  to = "/.netlify/functions/session"
   status = 200
 [[redirects]]
   from = "/api/admin"
@@ -31,12 +31,6 @@
 [[redirects]]
   from = "/admin"
   to = "/admin.html"
-  status = 200
-
-# --- Liens personnels : /marie/k3xf9pq2mw7br4tlzy6n --------------------------
-[[redirects]]
-  from = "/:prenom/:jeton"
-  to = "/index.html"
   status = 200
 
 [[headers]]

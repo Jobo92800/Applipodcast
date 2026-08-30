@@ -144,8 +144,8 @@ export function slug(texte) {
     .replace(/^-|-$/g, '') || 'acces';
 }
 
-export function lienCliente(cliente) {
-  return `${SITE_URL.replace(/\/$/, '')}/${slug(cliente.prenom)}/${cliente.jeton}`;
+export function lienSite() {
+  return SITE_URL.replace(/\/$/, '');
 }
 
 /* ------------------------------------------------------------ Téléphone --- */
@@ -168,33 +168,39 @@ export function normaliserTel(brut) {
   return /^\+\d{10,15}$/.test(n) ? n : null;
 }
 
-/* ------------------------------------------------------------------ SMS --- */
+/* --------------------------------------------------- Authentification --- */
 
 /**
- * Envoi via Brevo. Sans clé configurée, on journalise sans faire échouer
- * l'appel : la thérapeute peut toujours transmettre le lien à la main.
+ * Appel à l'API Auth de Supabase.
+ * Le navigateur ne parle jamais directement à Supabase : tout passe par ici,
+ * ce qui permet de contrôler les messages d'erreur et de limiter les tentatives.
  */
-export async function envoyerSms(telephone, contenu) {
-  const cle = process.env.BREVO_API_KEY;
-  if (!cle) {
-    console.warn('BREVO_API_KEY absente : SMS non envoyé à', telephone);
-    return { envoye: false, raison: 'sms-non-configure' };
-  }
-  const r = await fetch('https://api.brevo.com/v3/transactionalSMS/sms', {
-    method: 'POST',
-    headers: { 'api-key': cle, 'Content-Type': 'application/json', accept: 'application/json' },
-    body: JSON.stringify({
-      sender: (process.env.BREVO_SMS_SENDER || 'MAbeautyPl').slice(0, 11),
-      recipient: telephone.replace('+', ''),
-      content: contenu,
-      type: 'transactional',
-    }),
+export async function auth(chemin, options = {}) {
+  const r = await fetch(`${SUPABASE_URL}/auth/v1${chemin}`, {
+    ...options,
+    headers: {
+      apikey: SERVICE_KEY,
+      Authorization: options.jetonUtilisateur
+        ? `Bearer ${options.jetonUtilisateur}`
+        : `Bearer ${SERVICE_KEY}`,
+      'Content-Type': 'application/json',
+      ...(options.headers || {}),
+    },
   });
-  if (!r.ok) {
-    console.error('Échec SMS Brevo :', r.status, (await r.text()).slice(0, 200));
-    return { envoye: false, raison: 'sms-echec' };
-  }
-  return { envoye: true };
+  const corps = await r.json().catch(() => ({}));
+  return { ok: r.ok, statut: r.status, corps };
+}
+
+/** Vérifie un jeton de session et renvoie le compte, ou null. */
+export async function utilisateurDuJeton(jetonAcces) {
+  if (!jetonAcces) return null;
+  const { ok, corps } = await auth('/user', { jetonUtilisateur: jetonAcces });
+  return ok && corps?.id ? corps : null;
+}
+
+/** Extrait le jeton de session de l'en-tête Authorization. */
+export function jetonDeRequete(req) {
+  return (req.headers.get('authorization') || '').replace(/^Bearer\s+/i, '').trim() || null;
 }
 
 /* --------------------------------------------------- Limitation de débit --- */
@@ -241,18 +247,19 @@ export async function corpsJson(req) {
 }
 
 /**
- * Retrouve une cliente par son jeton, enregistre l'appareil et applique
+ * Retrouve la cliente derrière une session, enregistre l'appareil et applique
  * la limite d'appareils. Renvoie { cliente } ou { erreur, statut }.
  */
-export async function clienteParJeton(jeton, empreinte, ua) {
-  if (!jeton || !/^[a-z0-9]{6,40}$/.test(jeton)) {
-    return { erreur: 'lien-invalide', statut: 404 };
-  }
+export async function clienteParSession(req, empreinte, jetonSecours) {
+  // sendBeacon ne permet pas de poser un en-tête : le jeton peut arriver dans le corps.
+  const utilisateur = await utilisateurDuJeton(jetonDeRequete(req) || jetonSecours);
+  if (!utilisateur) return { erreur: 'session-expiree', statut: 401 };
+
   const cliente = await db.un(
     'clientes',
-    `select=*,parcours:parcours_code(nom_commercial)&jeton=eq.${jeton}`
+    `select=*,parcours:parcours_code(nom_commercial)&auth_user_id=eq.${utilisateur.id}`
   );
-  if (!cliente) return { erreur: 'lien-invalide', statut: 404 };
+  if (!cliente) return { erreur: 'compte-sans-parcours', statut: 403 };
   if (cliente.statut === 'suspendu') return { erreur: 'acces-suspendu', statut: 403 };
 
   if (empreinte) {
@@ -266,9 +273,9 @@ export async function clienteParJeton(jeton, empreinte, ua) {
       await db.creer('appareils', {
         cliente_id: cliente.id,
         empreinte,
-        ua: (ua || '').slice(0, 200),
+        ua: (req.headers.get('user-agent') || '').slice(0, 200),
       });
     }
   }
-  return { cliente };
+  return { cliente, utilisateur };
 }

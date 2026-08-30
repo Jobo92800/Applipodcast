@@ -3,7 +3,8 @@
 Parcours audio remis en centre avec la cure. Une étape à la fois, la suivante se
 débloque une fois la précédente réellement écoutée.
 
-Aucun compte, aucun mot de passe : la cliente reçoit un lien personnel par SMS.
+La cliente reçoit une invitation par e-mail, choisit son mot de passe, et se connecte
+ensuite depuis n'importe quel appareil.
 
 **Installation complète : [`INSTALLATION.md`](INSTALLATION.md)**
 
@@ -18,7 +19,7 @@ netlify/
   functions/            Les 5 routes de l'API
   lib/core.js           Accès Supabase, couverture d'écoute, SMS, jetons
 supabase/migrations/    Schéma de la base, à exécuter une fois
-tests/                  Banc d'essai local (37 contrôles)
+tests/                  Banc d'essai local (42 contrôles)
 maquettes/              Maquettes Claude Design, hors application
 assets/img/             Icônes PWA
 ```
@@ -34,7 +35,7 @@ rien n'est lisible depuis le navigateur, même avec la clé anonyme.
 | `POST /api/parcours` | État du parcours de la cliente |
 | `POST /api/audio` | Adresse de lecture temporaire d'une étape débloquée |
 | `POST /api/progression` | Enregistrement des secondes écoutées |
-| `POST /api/acces` | Identification par téléphone, renvoi du lien par SMS |
+| `POST /api/session` | Connexion, rafraîchissement, mot de passe oublié |
 | `POST /api/admin` | Espace thérapeute, protégé par `ADMIN_CODE` |
 
 ## Le déblocage
@@ -48,6 +49,16 @@ Seuil par défaut : 90 % du contenu, réglable par la variable `SEUIL_DEBLOCAGE`
 
 La progression suit la cliente d'un appareil à l'autre. Deux appareils maximum,
 réinitialisables par la thérapeute.
+
+## L'identification
+
+Comptes Supabase Auth, e-mail et mot de passe. Le navigateur ne parle jamais directement
+à Supabase : la connexion passe par `/api/session`, ce qui permet de limiter les
+tentatives et d'écrire les messages en français.
+
+La thérapeute crée le compte, la cliente reçoit une invitation par e-mail, clique, et
+choisit son mot de passe. La session se rafraîchit toute seule : en pratique elle ne le
+retape presque jamais.
 
 ## Les fichiers audio
 
@@ -63,15 +74,17 @@ jamais versionnés dans Git.
 node tests/run.mjs
 ```
 
-Exécute les vraies fonctions sur une base simulée : accès, déblocage séquentiel,
-tentative de triche, limite d'appareils, identification par téléphone, actions
-thérapeute. Aucune connexion à Supabase.
+Exécute les vraies fonctions sur une base et un service d'authentification simulés :
+invitation, connexion, mot de passe oublié, déblocage séquentiel, tentative de triche,
+limite d'appareils, actions thérapeute. Aucune connexion à Supabase.
 
 ## Variables d'environnement
 
 Définies dans Netlify, jamais dans le dépôt : `SUPABASE_URL`,
-`SUPABASE_SERVICE_ROLE_KEY`, `ADMIN_CODE`, `SITE_URL`, `BREVO_API_KEY`,
-`BREVO_SMS_SENDER`. Optionnelles : `SEUIL_DEBLOCAGE`, `APPAREILS_MAX`.
+`SUPABASE_SERVICE_ROLE_KEY`, `ADMIN_CODE`, `SITE_URL`.
+Optionnelles : `SEUIL_DEBLOCAGE`, `APPAREILS_MAX`.
+
+Les e-mails partent par le SMTP configuré dans Supabase, pas par Netlify.
 
 ## Vocabulaire
 

@@ -15,7 +15,6 @@ process.env.SUPABASE_URL = FAUX;
 process.env.SUPABASE_SERVICE_ROLE_KEY = 'cle-de-service-test';
 process.env.ADMIN_CODE = 'test-2026';
 process.env.SITE_URL = 'http://localhost:8123';
-process.env.BREVO_API_KEY = '';   // SMS journalisés, pas envoyés
 
 /* ------------------------------------------------- base simulée --- */
 export const tables = {
@@ -41,7 +40,22 @@ tables.etapes.push({
   sous_titre: '', duree_min: 10, duree_sec: 600, fichier: 'B/B01.mp3', actif: true,
 });
 
-export const journal = { sms: [], signatures: [] };
+export const journal = { emails: [], signatures: [] };
+
+/* Comptes simulés de Supabase Auth */
+export const comptes = new Map();   // jeton d'accès -> compte
+export const parEmail = new Map();  // email -> compte
+let seq = 0;
+function nouveauCompte(email, motDePasse) {
+  const c = { id: 'auth-' + (++seq), email, motDePasse: motDePasse || null };
+  parEmail.set(email, c);
+  return c;
+}
+function ouvrirSession(compte) {
+  const acces = 'acc-' + compte.id + '-' + (++seq);
+  comptes.set(acces, compte);
+  return { access_token: acces, refresh_token: 'ref-' + compte.id, expires_in: 3600, user: compte };
+}
 
 /* ------------------------------------- PostgREST minimal simulé --- */
 function filtrer(lignes, params) {
@@ -103,7 +117,7 @@ function repondre(donnees, statut = 200) {
 
 // Postgres applique les DEFAULT des colonnes ; on les reproduit ici.
 const DEFAUTS = {
-  clientes: { statut: 'actif', debloque_manuel: 0, vu: false, derniere_activite: null, nom: null, centre: null },
+  clientes: { statut: 'actif', debloque_manuel: 0, vu: false, derniere_activite: null, nom: null, centre: null, telephone: null, auth_user_id: null },
   progression: { couverture: '', position_sec: 0, taux: 0, terminee: false },
   etapes: { actif: true, duree_min: 15, duree_sec: null, fichier: null },
   appareils: { derniere_vue: new Date().toISOString() },
@@ -113,11 +127,58 @@ const vraiFetch = globalThis.fetch;
 globalThis.fetch = async (url, options = {}) => {
   const u = String(url);
   if (!u.startsWith(FAUX)) {
-    if (u.includes('brevo.com')) { journal.sms.push(JSON.parse(options.body)); return repondre({ ok: true }); }
     return vraiFetch(url, options);
   }
 
   const apres = u.slice(FAUX.length);
+
+  /* ---- Supabase Auth ---- */
+  if (apres.startsWith('/auth/v1/')) {
+    const corps = options.body ? JSON.parse(options.body) : {};
+    const jeton = (options.headers?.Authorization || '').replace('Bearer ', '');
+    const chemin = apres.split('?')[0];
+
+    if (chemin === '/auth/v1/user' && (options.method || 'GET') === 'GET') {
+      const c = comptes.get(jeton);
+      return c ? repondre(c) : repondre({ msg: 'invalid token' }, 401);
+    }
+    if (chemin === '/auth/v1/user' && options.method === 'PUT') {
+      const c = comptes.get(jeton);
+      if (!c) return repondre({ msg: 'invalid token' }, 401);
+      if ((corps.password || '').length < 8) return repondre({ msg: 'weak password' }, 422);
+      c.motDePasse = corps.password;
+      return repondre(c);
+    }
+    if (chemin === '/auth/v1/token' && apres.includes('grant_type=password')) {
+      const c = parEmail.get(corps.email);
+      if (!c || !c.motDePasse || c.motDePasse !== corps.password) {
+        return repondre({ error: 'invalid_grant' }, 400);
+      }
+      return repondre(ouvrirSession(c));
+    }
+    if (chemin === '/auth/v1/token' && apres.includes('grant_type=refresh_token')) {
+      const c = [...parEmail.values()].find((x) => 'ref-' + x.id === corps.refresh_token);
+      return c ? repondre(ouvrirSession(c)) : repondre({ error: 'invalid_grant' }, 400);
+    }
+    if (chemin === '/auth/v1/invite') {
+      if (parEmail.has(corps.email)) {
+        return repondre({ msg: 'A user with this email address has already been registered' }, 422);
+      }
+      const c = nouveauCompte(corps.email);
+      const s = ouvrirSession(c);
+      journal.emails.push({ type: 'invite', email: corps.email, acces: s.access_token });
+      return repondre(c);
+    }
+    if (chemin === '/auth/v1/recover') {
+      const c = parEmail.get(corps.email);
+      if (c) {
+        const s = ouvrirSession(c);
+        journal.emails.push({ type: 'recovery', email: corps.email, acces: s.access_token });
+      }
+      return repondre({});
+    }
+    return repondre({ msg: 'auth non simulé : ' + chemin }, 404);
+  }
 
   if (apres.startsWith('/storage/v1/object/sign/')) {
     const chemin = apres.replace('/storage/v1/object/sign/parcours-audio/', '');
@@ -169,7 +230,7 @@ globalThis.fetch = async (url, options = {}) => {
 
 /* ------------------------------------------- serveur de test --- */
 const FONCTIONS = {};
-for (const nom of ['parcours', 'audio', 'progression', 'acces', 'admin']) {
+for (const nom of ['parcours', 'audio', 'progression', 'session', 'admin']) {
   FONCTIONS[nom] = (await import(`${RACINE}/netlify/functions/${nom}.js`)).default;
 }
 
@@ -180,6 +241,11 @@ const TYPES = {
 
 http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://localhost');
+
+  if (url.pathname === '/__emails') {
+    res.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify(journal.emails));
+    return;
+  }
 
   if (url.pathname.startsWith('/api/')) {
     const nom = url.pathname.slice(5);
@@ -206,7 +272,7 @@ http.createServer(async (req, res) => {
   // Liens personnels /prenom/jeton et /admin
   let fichier = url.pathname;
   if (fichier === '/admin') fichier = '/admin.html';
-  else if (fichier === '/' || /^\/[^/.]+\/[^/.]+$/.test(fichier)) fichier = '/index.html';
+  else if (fichier === '/') fichier = '/index.html';
   const complet = path.join(RACINE, fichier);
   if (!fs.existsSync(complet) || fs.statSync(complet).isDirectory()) {
     res.writeHead(404).end('introuvable');

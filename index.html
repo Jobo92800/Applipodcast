@@ -236,12 +236,19 @@ p{margin:0 0 14px}
 .info-ligne span{color:var(--ink-3);font-weight:300}
 .info-ligne b{font-weight:500}
 .centre{text-align:center}
-.champ-tel{
-  width:100%;padding:20px 22px;border:2px solid var(--border);border-radius:var(--r);
-  background:#fff;font-family:inherit;font-size:21px;text-align:center;color:var(--ink);
-  letter-spacing:.04em
+.champ{
+  width:100%;padding:18px 20px;border:2px solid var(--border);border-radius:var(--r);
+  background:#fff;font-family:inherit;font-size:18px;color:var(--ink)
 }
-.champ-tel:focus{outline:none;border-color:var(--aqua);box-shadow:0 0 0 5px var(--aqua-soft)}
+.champ:focus{outline:none;border-color:var(--aqua);box-shadow:0 0 0 5px var(--aqua-soft)}
+.etiquette{display:block;font-size:14px;font-weight:500;color:var(--ink-2);margin:0 0 7px}
+.champ-mdp{position:relative}
+.champ-mdp .champ{padding-right:58px}
+.oeil{
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  width:44px;height:44px;display:grid;place-items:center;color:var(--ink-3);border-radius:12px
+}
+.oeil.actif{color:var(--aqua-dark)}
 .erreur{color:#C9285F;font-size:15px;text-align:center;margin:12px 0 0}
 .chargement{
   display:grid;place-items:center;min-height:70dvh;gap:16px;color:var(--ink-3);font-weight:300
@@ -401,6 +408,7 @@ p{margin:0 0 14px}
       <a class="btn clair" id="btn-contact" href="tel:+33466000000">Appeler mon centre</a>
     </div>
     <button class="btn clair" id="btn-installer">Ajouter à mon écran d'accueil</button>
+    <button class="btn-lien centre" id="btn-deconnexion" style="display:block;margin:18px auto 0">Me déconnecter</button>
     <p class="mini centre" style="margin:18px 0 30px">Version 1.0 · MAbeautyplus</p>
   </section>
 
@@ -437,28 +445,74 @@ p{margin:0 0 14px}
     </div>
   </section>
 
-  <!-- ========== IDENTIFICATION PAR TÉLÉPHONE ========== -->
-  <section class="screen" id="screen-tel">
-    <div class="entete" style="justify-content:center;padding-top:48px">
+  <!-- ========== CONNEXION ========== -->
+  <section class="screen" id="screen-connexion">
+    <div class="entete" style="justify-content:center;padding-top:44px">
       <div class="marque centre"><b>Mon parcours</b><span>by MAbeauty<i>plus</i></span></div>
     </div>
-    <div id="tel-formulaire">
-      <h1 class="centre" style="margin:26px 0 14px">Retrouver mon parcours</h1>
-      <p class="doux centre" style="margin-bottom:26px">Saisissez le numéro de téléphone que vous avez donné à votre centre.</p>
-      <input class="champ-tel" id="champ-tel" type="tel" inputmode="tel" autocomplete="tel"
-             placeholder="06 12 34 56 78" aria-label="Votre numéro de téléphone">
-      <p class="erreur" id="tel-erreur" hidden></p>
-      <button class="btn" id="btn-tel" style="margin-top:18px">Continuer</button>
-      <p class="mini centre" style="margin-top:16px">Aucun mot de passe. Si nous ne reconnaissons pas votre appareil, votre lien vous est renvoyé par SMS.</p>
+    <h1 class="centre" style="margin:24px 0 10px">Votre parcours audio</h1>
+    <p class="doux centre" style="margin-bottom:26px">Connectez-vous pour retrouver vos étapes, depuis n'importe quel appareil.</p>
+
+    <label class="etiquette" for="champ-email">Votre adresse e-mail</label>
+    <input class="champ" id="champ-email" type="email" inputmode="email" autocomplete="username"
+           placeholder="marie@exemple.fr" aria-label="Votre adresse e-mail">
+
+    <label class="etiquette" for="champ-mdp" style="margin-top:16px">Votre mot de passe</label>
+    <div class="champ-mdp">
+      <input class="champ" id="champ-mdp" type="password" autocomplete="current-password"
+             placeholder="••••••••" aria-label="Votre mot de passe">
+      <button type="button" class="oeil" data-voir="champ-mdp" aria-label="Afficher le mot de passe">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
     </div>
-    <div id="tel-envoye" hidden style="text-align:center;padding-top:30px">
+
+    <p class="erreur" id="connexion-erreur" hidden></p>
+    <button class="btn" id="btn-connexion" style="margin-top:20px">Se connecter</button>
+    <button class="btn-lien centre" id="btn-oubli" style="display:block;margin:14px auto 0">Mot de passe oublié ?</button>
+    <p class="mini centre" style="margin-top:24px">Votre accès vous a été créé par votre centre MAbeautyplus. Vérifiez vos courriers indésirables si vous n'avez rien reçu.</p>
+  </section>
+
+  <!-- ========== MOT DE PASSE OUBLIÉ ========== -->
+  <section class="screen" id="screen-oubli">
+    <div class="entete"><button class="btn-lien" id="btn-retour-connexion">← Retour</button></div>
+    <div id="oubli-formulaire">
+      <h1 style="margin:14px 0 12px">Mot de passe oublié</h1>
+      <p class="doux" style="margin-bottom:24px">Indiquez votre adresse e-mail, nous vous envoyons un lien pour en choisir un nouveau.</p>
+      <label class="etiquette" for="champ-oubli">Votre adresse e-mail</label>
+      <input class="champ" id="champ-oubli" type="email" inputmode="email" autocomplete="username"
+             placeholder="marie@exemple.fr" aria-label="Votre adresse e-mail">
+      <p class="erreur" id="oubli-erreur" hidden></p>
+      <button class="btn" id="btn-envoyer-oubli" style="margin-top:20px">Recevoir le lien</button>
+    </div>
+    <div id="oubli-envoye" hidden style="text-align:center;padding-top:26px">
       <div class="sceau" style="width:88px;height:88px;margin-bottom:24px">
         <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5 12 13l9-5.5"/><rect x="3" y="5" width="18" height="14" rx="3"/></svg>
       </div>
-      <h1 style="margin-bottom:14px">Votre lien vient de partir</h1>
-      <p class="doux">Vous allez recevoir un SMS avec l'accès à votre parcours. Il suffit de cliquer dessus.</p>
-      <p class="mini" style="margin-top:22px">Rien reçu au bout de quelques minutes ? Contactez votre centre MAbeautyplus.</p>
+      <h1 style="margin-bottom:14px">Regardez vos e-mails</h1>
+      <p class="doux">Si cette adresse correspond à un compte, vous allez recevoir un lien pour choisir un nouveau mot de passe.</p>
+      <p class="mini" style="margin-top:22px">Pensez à vérifier vos courriers indésirables.</p>
     </div>
+  </section>
+
+  <!-- ========== CHOISIR SON MOT DE PASSE ========== -->
+  <section class="screen" id="screen-definir">
+    <div class="entete" style="justify-content:center;padding-top:44px">
+      <div class="marque centre"><b>Mon parcours</b><span>by MAbeauty<i>plus</i></span></div>
+    </div>
+    <h1 class="centre" id="definir-titre" style="margin:24px 0 10px">Bienvenue</h1>
+    <p class="doux centre" style="margin-bottom:26px">Choisissez le mot de passe qui vous permettra de revenir quand vous voulez.</p>
+
+    <label class="etiquette" for="champ-nouveau">Votre nouveau mot de passe</label>
+    <div class="champ-mdp">
+      <input class="champ" id="champ-nouveau" type="password" autocomplete="new-password"
+             placeholder="8 caractères minimum" aria-label="Votre nouveau mot de passe">
+      <button type="button" class="oeil" data-voir="champ-nouveau" aria-label="Afficher le mot de passe">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+    </div>
+    <p class="erreur" id="definir-erreur" hidden></p>
+    <button class="btn" id="btn-definir" style="margin-top:20px">Enregistrer et continuer</button>
+    <p class="mini centre" style="margin-top:20px">Notez-le quelque part : il vous servira à vous reconnecter.</p>
   </section>
 
   <!-- ========== NAVIGATION ========== -->
@@ -481,11 +535,12 @@ p{margin:0 0 14px}
 <script>
 /* =========================================================
    MON PARCOURS by MAbeautyplus — application cliente
-   Les données viennent des fonctions Netlify. Le navigateur
-   ne détient aucune clé et ne décide jamais d'un déblocage.
+   Identification par compte e-mail. Le navigateur ne détient
+   aucune clé et ne décide jamais d'un déblocage.
    ========================================================= */
 
-const CLE_JETON = 'mbp_jeton';
+const CLE_ACCES = 'mbp_acces';
+const CLE_RAFRAICHISSEMENT = 'mbp_rafraichissement';
 const CLE_APPAREIL = 'mbp_appareil';
 const SAUVEGARDE_MS = 30000;
 
@@ -507,31 +562,68 @@ function idAppareil() {
 }
 
 /* ------------------------------------------------------------- API --- */
-async function api(route, corps) {
+function erreurApi(donnees, statut) {
+  const e = new Error(donnees.erreur || 'erreur');
+  e.code = donnees.erreur;
+  e.statut = statut;
+  return e;
+}
+
+async function appel(route, corps, avecJeton = true) {
+  const entetes = { 'Content-Type': 'application/json' };
+  const acces = Local.lire(CLE_ACCES);
+  if (avecJeton && acces) entetes.Authorization = 'Bearer ' + acces;
   const r = await fetch('/api/' + route, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: entetes,
     body: JSON.stringify({ ...corps, appareil: idAppareil() }),
   });
   const donnees = await r.json().catch(() => ({}));
-  if (!r.ok) {
-    const err = new Error(donnees.erreur || 'erreur');
-    err.code = donnees.erreur;
-    err.statut = r.status;
-    throw err;
-  }
+  if (!r.ok) throw erreurApi(donnees, r.status);
   return donnees;
 }
 
+/** Appel authentifié, avec une tentative de rafraîchissement si la session a expiré. */
+async function api(route, corps = {}) {
+  try {
+    return await appel(route, corps);
+  } catch (e) {
+    if (e.statut !== 401) throw e;
+    if (!(await rafraichirSession())) throw e;
+    return appel(route, corps);
+  }
+}
+
+async function rafraichirSession() {
+  const jeton = Local.lire(CLE_RAFRAICHISSEMENT);
+  if (!jeton) return false;
+  try {
+    const rep = await appel('session', { action: 'rafraichir', rafraichissement: jeton }, false);
+    enregistrerSession(rep);
+    return true;
+  } catch {
+    oublierSession();
+    return false;
+  }
+}
+
+function enregistrerSession(rep) {
+  Local.ecrire(CLE_ACCES, rep.acces);
+  if (rep.rafraichissement) Local.ecrire(CLE_RAFRAICHISSEMENT, rep.rafraichissement);
+}
+function oublierSession() {
+  Local.effacer(CLE_ACCES);
+  Local.effacer(CLE_RAFRAICHISSEMENT);
+}
+
 /* ----------------------------------------------------------- État --- */
-let jeton = null;
-let etat = null;        // réponse de /api/parcours
-let numeroCourant = 0;  // numéro de l'étape ouverte
-let couv = null;        // Uint8Array : une case par seconde écoutée
+let etat = null;
+let numeroCourant = 0;
+let couv = null;
 let dureeEp = 0;
 let celebrationEnCours = false;
 let minuteur = null;
-let sale = false;       // progression non encore envoyée
+let sale = false;
 
 const $ = (s) => document.querySelector(s);
 const mmss = (s) => {
@@ -541,9 +633,8 @@ const mmss = (s) => {
 
 /* --------------------------------------------------- Couverture --- */
 function empaqueter(bits) {
-  const n = bits.length;
-  const octets = new Uint8Array(Math.ceil(n / 8));
-  for (let i = 0; i < n; i++) if (bits[i]) octets[i >> 3] |= 128 >> (i & 7);
+  const octets = new Uint8Array(Math.ceil(bits.length / 8));
+  for (let i = 0; i < bits.length; i++) if (bits[i]) octets[i >> 3] |= 128 >> (i & 7);
   let s = '';
   for (const o of octets) s += String.fromCharCode(o);
   return btoa(s);
@@ -602,7 +693,7 @@ const ICONES = {
 };
 
 /* ------------------------------------------------------ Écrans --- */
-const ecrans = ['chargement', 'arrivee', 'accueil', 'ecoute', 'parcours', 'espace', 'refus', 'tel'];
+const ecrans = ['chargement', 'connexion', 'oubli', 'definir', 'arrivee', 'accueil', 'ecoute', 'parcours', 'espace', 'refus'];
 function aller(nom) {
   ecrans.forEach((e) => $('#screen-' + e).classList.toggle('actif', e === nom));
   $('#nav').classList.toggle('visible', ['accueil', 'parcours', 'espace'].includes(nom));
@@ -713,8 +804,8 @@ async function ouvrirEtape(numero) {
   aller('ecoute');
 
   try {
-    const rep = await api('audio', { jeton, numero });
-    if (numeroCourant !== numero) return;          // la cliente a déjà changé d'écran
+    const rep = await api('audio', { numero });
+    if (numeroCourant !== numero) return;
     audio.src = rep.url;
     audio.load();
     const preparer = () => preparerCouverture(e, rep.dureeSec);
@@ -803,7 +894,6 @@ $('#btn-retour').onclick = () => { pause(); aller('accueil'); };
 async function envoyer() {
   if (!couv || !numeroCourant || celebrationEnCours) return;
   const charge = {
-    jeton,
     numero: numeroCourant,
     couverture: empaqueter(couv),
     position: Math.floor(audio.currentTime),
@@ -816,20 +906,22 @@ async function envoyer() {
     if (e) { e.taux = rep.taux; e.position = charge.position; }
     if (rep.terminee && !e?.terminee) await celebrer();
   } catch {
-    sale = true;   // on retentera à la prochaine occasion
+    sale = true;
   }
 }
 
 /** Dernier envoi quand la page se ferme : sendBeacon survit à la fermeture. */
 function envoiUltime() {
   if (!couv || !numeroCourant) return;
+  const acces = Local.lire(CLE_ACCES);
+  if (!acces) return;
   const charge = JSON.stringify({
-    jeton, numero: numeroCourant, appareil: idAppareil(),
+    acces, appareil: idAppareil(), numero: numeroCourant,
     couverture: empaqueter(couv), position: Math.floor(audio.currentTime), duree: dureeEp,
   });
   try {
     navigator.sendBeacon('/api/progression', new Blob([charge], { type: 'application/json' }));
-  } catch { /* rien à faire de plus */ }
+  } catch { /* rien de plus à tenter */ }
 }
 document.addEventListener('visibilitychange', () => { if (document.hidden) envoiUltime(); });
 window.addEventListener('pagehide', envoiUltime);
@@ -864,22 +956,15 @@ $('#btn-suivant').onclick = () => fermerCelebration(true);
 $('#btn-plus-tard').onclick = () => fermerCelebration(false);
 
 /* ------------------------------------------------ Identification --- */
-function jetonURL() {
-  const p = new URLSearchParams(location.search).get('c');
-  if (p) return p.trim();
-  const seg = location.pathname.split('/').filter(Boolean).pop() || '';
-  return /^[a-z0-9]{6,40}$/i.test(seg) && !seg.includes('.') ? seg : null;
-}
-
 async function rafraichir() {
-  etat = await api('parcours', { jeton });
+  etat = await api('parcours');
   return etat;
 }
 
 const MESSAGES = {
-  'lien-invalide': ["Ce lien n'est plus valable", 'Retrouvez votre parcours avec votre numéro de téléphone.'],
   'acces-suspendu': ['Votre accès est en pause', 'Contactez votre centre MAbeautyplus, votre thérapeute pourra le réactiver.'],
   'trop-appareils': ['Accès déjà utilisé', 'Ce parcours est personnel et déjà associé à vos appareils. Contactez votre centre MAbeautyplus.'],
+  'compte-sans-parcours': ['Aucun parcours attribué', "Votre compte existe, mais aucun parcours ne lui est encore associé. Contactez votre centre MAbeautyplus."],
   'parcours-vide': ['Votre parcours arrive bientôt', 'Vos épisodes sont en cours de préparation. Contactez votre centre MAbeautyplus.'],
 };
 
@@ -887,73 +972,130 @@ function montrerRefus(code) {
   const [titre, texte] = MESSAGES[code] || ['Connexion impossible', 'Vérifiez votre connexion internet et réessayez.'];
   $('#refus-titre').textContent = titre;
   $('#refus-texte').textContent = texte;
-  $('#btn-vers-tel').hidden = code === 'trop-appareils' || code === 'acces-suspendu';
+  $('#btn-vers-tel').textContent = 'Revenir à la connexion';
+  $('#btn-vers-tel').hidden = false;
   aller('refus');
 }
 
-async function demarrer() {
-  jeton = jetonURL() || Local.lire(CLE_JETON);
-  if (!jeton) { aller('tel'); return; }
-
-  try {
-    await rafraichir();
-  } catch (err) {
-    if (err.code === 'lien-invalide') Local.effacer(CLE_JETON);
-    montrerRefus(err.code);
-    return;
-  }
-
-  Local.ecrire(CLE_JETON, jeton);
-  // On retire le jeton de la barre d'adresse : plus rien de personnel n'y traîne.
-  if (location.search.includes('c=')) history.replaceState({}, '', location.pathname);
-
-  $('#salut-arrivee').textContent = 'Bonjour ' + etat.cliente.prenom + ' 👋';
-  $('#illu-arrivee').innerHTML =
-    `<div style="width:130px;height:130px;margin:0 auto;border-radius:50%;overflow:hidden;box-shadow:var(--shadow-lg)">${couverture(0, 'arr')}</div>`;
-  aller(etat.cliente.vu ? 'accueil' : 'arrivee');
-}
-
-$('#btn-commencer').onclick = () => aller('accueil');
-$('#btn-vers-tel').onclick = () => aller('tel');
-
-/* Identification par téléphone */
-const champTel = $('#champ-tel');
-async function identifier() {
-  const numero = champTel.value.trim();
-  const erreur = $('#tel-erreur');
-  erreur.hidden = true;
-  if (numero.replace(/\D/g, '').length < 9) {
-    erreur.textContent = 'Ce numéro semble incomplet.';
-    erreur.hidden = false;
-    champTel.focus();
-    return;
-  }
-  const bouton = $('#btn-tel');
+/** Petit utilitaire pour les boutons qui attendent une réponse du serveur. */
+async function pendant(bouton, libelle, tache) {
+  const original = bouton.textContent;
   bouton.disabled = true;
-  bouton.textContent = 'Un instant…';
-  try {
-    const rep = await api('acces', { telephone: numero });
-    if (rep.mode === 'direct') {
-      jeton = rep.jeton;
-      Local.ecrire(CLE_JETON, jeton);
-      await rafraichir();
-      aller(etat.cliente.vu ? 'accueil' : 'arrivee');
-      return;
-    }
-    $('#tel-formulaire').hidden = true;
-    $('#tel-envoye').hidden = false;
-  } catch (err) {
-    erreur.textContent = err.code === 'trop-de-tentatives'
-      ? 'Trop d\u2019essais. Patientez quelques minutes ou appelez votre centre.'
-      : 'Connexion impossible. Réessayez dans un instant.';
-    erreur.hidden = false;
-  } finally {
-    bouton.disabled = false;
-    bouton.textContent = 'Continuer';
-  }
+  bouton.textContent = libelle;
+  try { return await tache(); }
+  finally { bouton.disabled = false; bouton.textContent = original; }
 }
-$('#btn-tel').onclick = identifier;
-champTel.addEventListener('keydown', (e) => { if (e.key === 'Enter') identifier(); });
+
+function afficherErreur(id, message) {
+  const p = $('#' + id);
+  p.textContent = message;
+  p.hidden = false;
+}
+
+/* Afficher / masquer les mots de passe */
+document.querySelectorAll('[data-voir]').forEach((b) => {
+  b.onclick = () => {
+    const champ = $('#' + b.dataset.voir);
+    const visible = champ.type === 'text';
+    champ.type = visible ? 'password' : 'text';
+    b.classList.toggle('actif', !visible);
+    b.setAttribute('aria-label', visible ? 'Afficher le mot de passe' : 'Masquer le mot de passe');
+  };
+});
+
+/* --- Connexion --- */
+async function connecter() {
+  $('#connexion-erreur').hidden = true;
+  const email = $('#champ-email').value.trim();
+  const motDePasse = $('#champ-mdp').value;
+  if (!email || !motDePasse) {
+    afficherErreur('connexion-erreur', 'Renseignez votre e-mail et votre mot de passe.');
+    return;
+  }
+  await pendant($('#btn-connexion'), 'Connexion…', async () => {
+    try {
+      const rep = await appel('session', { action: 'connexion', email, motDePasse }, false);
+      enregistrerSession(rep);
+      $('#champ-mdp').value = '';
+      await ouvrirParcours();
+    } catch (err) {
+      const messages = {
+        'identifiants-invalides': "E-mail ou mot de passe incorrect. Vérifiez votre saisie.",
+        'compte-sans-parcours': "Votre compte existe, mais aucun parcours ne lui est encore associé. Contactez votre centre.",
+        'trop-de-tentatives': "Trop d'essais. Patientez quelques minutes ou appelez votre centre.",
+      };
+      afficherErreur('connexion-erreur', messages[err.code] || "Connexion impossible. Réessayez dans un instant.");
+    }
+  });
+}
+$('#btn-connexion').onclick = connecter;
+$('#champ-mdp').addEventListener('keydown', (e) => { if (e.key === 'Enter') connecter(); });
+$('#champ-email').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('#champ-mdp').focus(); });
+
+/* --- Mot de passe oublié --- */
+$('#btn-oubli').onclick = () => {
+  $('#champ-oubli').value = $('#champ-email').value.trim();
+  $('#oubli-formulaire').hidden = false;
+  $('#oubli-envoye').hidden = true;
+  $('#oubli-erreur').hidden = true;
+  aller('oubli');
+};
+$('#btn-retour-connexion').onclick = () => aller('connexion');
+$('#btn-envoyer-oubli').onclick = async () => {
+  $('#oubli-erreur').hidden = true;
+  const email = $('#champ-oubli').value.trim();
+  if (!email.includes('@')) {
+    afficherErreur('oubli-erreur', 'Cette adresse e-mail semble incomplète.');
+    return;
+  }
+  await pendant($('#btn-envoyer-oubli'), 'Envoi…', async () => {
+    try {
+      await appel('session', { action: 'oubli', email }, false);
+      $('#oubli-formulaire').hidden = true;
+      $('#oubli-envoye').hidden = false;
+    } catch (err) {
+      afficherErreur('oubli-erreur', err.code === 'trop-de-tentatives'
+        ? "Trop d'essais. Patientez quelques minutes."
+        : "Envoi impossible. Réessayez dans un instant.");
+    }
+  });
+};
+
+/* --- Choisir son mot de passe (invitation ou réinitialisation) --- */
+$('#btn-definir').onclick = async () => {
+  $('#definir-erreur').hidden = true;
+  const motDePasse = $('#champ-nouveau').value;
+  if (motDePasse.length < 8) {
+    afficherErreur('definir-erreur', 'Choisissez un mot de passe d\u2019au moins 8 caractères.');
+    return;
+  }
+  await pendant($('#btn-definir'), 'Enregistrement…', async () => {
+    try {
+      await appel('session', {
+        action: 'definir', motDePasse, acces: Local.lire(CLE_ACCES),
+      }, false);
+      $('#champ-nouveau').value = '';
+      await ouvrirParcours();
+    } catch (err) {
+      const messages = {
+        'mot-de-passe-court': 'Choisissez un mot de passe d\u2019au moins 8 caractères.',
+        'mot-de-passe-faible': 'Ce mot de passe est trop simple, ajoutez quelques caractères.',
+        'lien-expire': "Ce lien n'est plus valable. Demandez-en un nouveau depuis « Mot de passe oublié ».",
+      };
+      afficherErreur('definir-erreur', messages[err.code] || 'Enregistrement impossible. Réessayez.');
+    }
+  });
+};
+
+/* --- Déconnexion --- */
+$('#btn-deconnexion').onclick = () => {
+  pause();
+  oublierSession();
+  etat = null;
+  $('#champ-email').value = '';
+  $('#champ-mdp').value = '';
+  aller('connexion');
+};
 
 /* ------------------------------------------------ Écran verrouillé --- */
 function majMediaSession() {
@@ -973,7 +1115,6 @@ function majMediaSession() {
   navigator.mediaSession.setActionHandler('seekforward', () => {
     audio.currentTime = Math.min((audio.duration || 0) - 0.3, audio.currentTime + 15);
   });
-  // Pas de piste suivante : le parcours avance étape par étape.
   navigator.mediaSession.setActionHandler('nexttrack', null);
   navigator.mediaSession.setActionHandler('previoustrack', null);
 }
@@ -986,8 +1127,51 @@ $('#btn-installer').onclick = () => {
   if (invite) { invite.prompt(); invite = null; return; }
   alert("Sur iPhone : appuyez sur le bouton Partager, puis « Sur l'écran d'accueil ».\nSur Android : menu ⋮, puis « Ajouter à l'écran d'accueil ».");
 };
+$('#btn-vers-tel').onclick = () => aller('connexion');
+$('#btn-commencer').onclick = () => aller('accueil');
 
 /* -------------------------------------------------------- Démarrage --- */
+async function ouvrirParcours() {
+  try {
+    await rafraichir();
+  } catch (err) {
+    if (err.statut === 401) { oublierSession(); aller('connexion'); return; }
+    montrerRefus(err.code);
+    return;
+  }
+  $('#salut-arrivee').textContent = 'Bonjour ' + etat.cliente.prenom + ' 👋';
+  $('#illu-arrivee').innerHTML =
+    `<div style="width:130px;height:130px;margin:0 auto;border-radius:50%;overflow:hidden;box-shadow:var(--shadow-lg)">${couverture(0, 'arr')}</div>`;
+  aller(etat.cliente.vu ? 'accueil' : 'arrivee');
+}
+
+/**
+ * Les e-mails d'invitation et de réinitialisation renvoient vers le site avec
+ * une session dans l'ancre de l'adresse. On la récupère, puis on nettoie l'URL.
+ */
+function sessionDepuisLien() {
+  const ancre = new URLSearchParams(location.hash.replace(/^#/, ''));
+  const acces = ancre.get('access_token');
+  if (!acces) return null;
+  const type = ancre.get('type');
+  enregistrerSession({ acces, rafraichissement: ancre.get('refresh_token') });
+  history.replaceState({}, '', location.pathname);
+  return type || 'recovery';
+}
+
+async function demarrer() {
+  const type = sessionDepuisLien();
+  if (type) {
+    $('#definir-titre').textContent = type === 'invite' ? 'Bienvenue' : 'Nouveau mot de passe';
+    aller('definir');
+    return;
+  }
+  if (!Local.lire(CLE_ACCES) && !Local.lire(CLE_RAFRAICHISSEMENT)) {
+    aller('connexion');
+    return;
+  }
+  await ouvrirParcours();
+}
 demarrer();
 
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
