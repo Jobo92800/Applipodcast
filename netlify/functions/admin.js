@@ -7,7 +7,7 @@
 */
 import {
   json, configManquante, corpsJson, db, auth, ADMIN_CODE, APPAREILS_MAX,
-  normaliserTel, urlEnvoi, journaliser, ipDe, SITE_URL,
+  normaliserTel, urlEnvoi, urlSignee, journaliser, ipDe, SITE_URL,
 } from '../lib/core.js';
 
 const ok = (donnees) => json(200, { ok: true, ...donnees });
@@ -224,6 +224,15 @@ export default async (req) => {
           'parcours_code,numero'
         );
         return ok({ etape });
+      }
+
+      /* Écoute de contrôle depuis l'espace thérapeute : même URL signée que
+         pour une cliente, mais sans condition de déblocage. */
+      case 'ecouter': {
+        const etape = await db.un('etapes', `select=id,titre,fichier&id=eq.${corps.id}`);
+        if (!etape) return json(404, { erreur: 'etape-inconnue' });
+        if (!etape.fichier) return json(404, { erreur: 'audio-absent' });
+        return ok({ url: await urlSignee(etape.fichier, 3600), titre: etape.titre });
       }
 
       case 'url-envoi': {

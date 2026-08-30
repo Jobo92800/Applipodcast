@@ -118,6 +118,13 @@ await post('admin',{action:'modifier',id:c.id,reinitialiserAppareils:true},ADMIN
 r = await post('parcours',{appareil:'ap9'},auth(acces2));
 p('appareils réinitialisés', r.statut===200);
 
+const lot = await post('admin',{action:'parcours'},ADMIN);
+const avecAudio = lot.etapes.find((e) => e.fichier);
+r = await post('admin',{action:'ecouter',id:avecAudio.id},ADMIN);
+p('écoute de contrôle signée', r.statut===200 && r.url.includes('token=faux'));
+r = await post('admin',{action:'ecouter',id:'00000000-0000-0000-0000-000000000000'},ADMIN);
+p('écoute d\'une étape inconnue refusée', r.statut===404);
+
 r = await post('admin',{action:'url-envoi',chemin:'A/A01.mp3'},ADMIN);
 p('URL d\'envoi signée', r.statut===200 && r.url.includes('token=faux'));
 r = await post('admin',{action:'url-envoi',chemin:'../secret.env'},ADMIN);

@@ -85,6 +85,8 @@ label{display:block;font-size:13.5px;font-weight:500;margin:0 0 6px;color:var(--
 .ep-etat{font-size:13px;font-weight:300}
 .ep-ok{color:var(--aqua-dark)}
 .ep-manque{color:#B08968}
+.ep-actions{display:flex;gap:8px;align-items:center}
+.lecteur{width:100%;margin-top:10px;height:34px}
 .groupe{margin-bottom:30px}
 .groupe h3{font-size:17px;font-weight:600;margin:0 0 6px}
 .barre-envoi{height:5px;border-radius:999px;background:#E4EFEF;overflow:hidden;margin-top:8px}
@@ -460,8 +462,12 @@ function rendreEpisodes() {
               ${e.duree_sec ? `Audio en ligne · ${Math.round(e.duree_sec / 60)} min` : 'Audio à déposer'}
             </span>
             <div class="barre-envoi" hidden><i></i></div>
+            <audio class="lecteur" controls preload="none" hidden></audio>
           </div>
-          <button class="btn clair mini" data-envoi="${e.id}">${e.duree_sec ? 'Remplacer' : 'Déposer le MP3'}</button>
+          <div class="ep-actions">
+            ${e.duree_sec ? `<button class="btn clair mini" data-ecoute="${e.id}">Écouter</button>` : ''}
+            <button class="btn clair mini" data-envoi="${e.id}">${e.duree_sec ? 'Remplacer' : 'Déposer le MP3'}</button>
+          </div>
         </div>`).join('') : '<p class="doux" style="font-size:15px">Aucune étape enregistrée pour ce parcours.</p>'}
     </div>`;
   }).join('');
@@ -469,6 +475,39 @@ function rendreEpisodes() {
   document.querySelectorAll('[data-envoi]').forEach((b) => {
     b.onclick = () => choisirFichier(b.dataset.envoi);
   });
+  document.querySelectorAll('[data-ecoute]').forEach((b) => {
+    b.onclick = () => ecouterEtape(b.dataset.ecoute, b);
+  });
+}
+
+/* Écoute de contrôle. L'adresse est signée pour une heure : elle ne peut pas
+   être partagée durablement, comme celle servie aux clientes. */
+async function ecouterEtape(etapeId, bouton) {
+  const ligne = document.querySelector(`[data-ep="${etapeId}"]`);
+  const lecteur = ligne.querySelector('.lecteur');
+
+  if (!lecteur.hidden) {
+    lecteur.pause();
+    lecteur.hidden = true;
+    bouton.textContent = 'Écouter';
+    return;
+  }
+
+  bouton.disabled = true;
+  bouton.textContent = 'Ouverture…';
+  try {
+    const { url } = await api('ecouter', { id: etapeId });
+    lecteur.src = url;
+    lecteur.hidden = false;
+    bouton.textContent = 'Masquer';
+    await lecteur.play().catch(() => {});
+  } catch (e) {
+    console.error(e);
+    toast(e.code === 'audio-absent' ? 'Aucun audio sur cette étape' : 'Lecture impossible');
+    bouton.textContent = 'Écouter';
+  } finally {
+    bouton.disabled = false;
+  }
 }
 
 function choisirFichier(etapeId) {
