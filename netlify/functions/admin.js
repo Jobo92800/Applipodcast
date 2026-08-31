@@ -14,6 +14,40 @@ const ok = (donnees) => json(200, { ok: true, ...donnees });
 const nettoyerEmail = (v) => String(v || '').trim().toLowerCase();
 const emailValide = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
 
+const MDP_MIN = 8;
+
+/**
+ * Crée le compte avec son mot de passe déjà défini et l'e-mail confirmé.
+ *
+ * La cliente est dans le centre au moment de la signature : lui faire faire
+ * un aller-retour par sa boîte mail pendant que la thérapeute attend n'a pas
+ * de sens. Le compte fonctionne immédiatement.
+ */
+async function creerAvecMotDePasse(email, prenom, motDePasse) {
+  const r = await auth('/admin/users', {
+    method: 'POST',
+    body: JSON.stringify({
+      email,
+      password: motDePasse,
+      email_confirm: true,
+      user_metadata: { prenom },
+    }),
+  });
+  if (r.ok) return { envoye: false, motDePasseDefini: true, utilisateur: r.corps };
+
+  const message = String(r.corps?.msg || r.corps?.message || r.corps?.error_description || '');
+  return { envoye: false, motDePasseDefini: false, raison: 'creation-refusee', detail: message.slice(0, 160) };
+}
+
+/** Redéfinit le mot de passe d'un compte existant. */
+async function redefinirMotDePasse(userId, motDePasse) {
+  const r = await auth(`/admin/users/${userId}`, {
+    method: 'PUT',
+    body: JSON.stringify({ password: motDePasse, email_confirm: true }),
+  });
+  return r.ok;
+}
+
 /** Envoie l'e-mail d'invitation qui permet de choisir son mot de passe. */
 async function inviter(email, prenom) {
   const r = await auth(`/invite?redirect_to=${encodeURIComponent(SITE_URL)}`, {
@@ -97,15 +131,47 @@ export default async (req) => {
         const parcours = await db.un('parcours', `select=code&code=eq.${parcoursCode}`);
         if (!parcours) return json(400, { erreur: 'parcours-inconnu' });
 
-        const existante = await db.un(
-          'clientes',
-          `select=id,prenom,statut&email=eq.${encodeURIComponent(email)}`
-        );
-        if (existante) {
-          return json(409, { erreur: 'email-deja-utilise', prenom: existante.prenom });
+        const motDePasse = String(corps.motDePasse || '');
+        if (motDePasse && motDePasse.length < MDP_MIN) {
+          return json(400, { erreur: 'mot-de-passe-court' });
         }
 
-        const invitation = await inviter(email, prenom);
+        const existante = await db.un(
+          'clientes',
+          `select=id,prenom,statut,auth_user_id,parcours_code&email=${'eq.' + encodeURIComponent(email)}`
+        );
+
+        // Compte déjà là : avec un mot de passe fourni, on le redéfinit et on
+        // met le parcours à jour plutôt que de refuser. C'est ce que la
+        // thérapeute veut quand elle reprend une cliente au comptoir.
+        if (existante) {
+          if (!motDePasse) {
+            return json(409, { erreur: 'email-deja-utilise', prenom: existante.prenom });
+          }
+          if (!existante.auth_user_id) {
+            return json(409, { erreur: 'compte-sans-identifiant', prenom: existante.prenom });
+          }
+          const redefini = await redefinirMotDePasse(existante.auth_user_id, motDePasse);
+          if (!redefini) return json(502, { erreur: 'mot-de-passe-refuse' });
+
+          if (existante.parcours_code !== parcoursCode) {
+            await db.majSur('clientes', `id=eq.${existante.id}`, { parcours_code: parcoursCode });
+          }
+          await journaliser('cliente-mdp-redefini', { clienteId: existante.id, ip: ipDe(req) });
+          return ok({
+            cliente: { id: existante.id, prenom: existante.prenom, email },
+            invitation: { envoye: false, motDePasseDefini: true },
+            existante: true,
+          });
+        }
+
+        const invitation = motDePasse
+          ? await creerAvecMotDePasse(email, prenom, motDePasse)
+          : await inviter(email, prenom);
+
+        if (motDePasse && !invitation.motDePasseDefini) {
+          return json(502, { erreur: 'creation-refusee', detail: invitation.detail });
+        }
 
         const [cliente] = await db.creer('clientes', {
           prenom,

@@ -112,6 +112,18 @@ p('progression visible côté thérapeute', c.terminees===1 && c.total===4);
 p('compte marqué actif', c.compteActive===true);
 p('téléphone conservé pour le centre', c.telephone==='+33612345678');
 
+// --- création directe avec mot de passe ---
+r = await post('admin',{action:'creer',prenom:'Sonia',email:'sonia@exemple.fr',parcours:'A',motDePasse:'motdepasse1'},ADMIN);
+p('compte créé avec mot de passe', r.statut===200 && r.invitation?.motDePasseDefini===true);
+r = await post('session',{action:'connexion',email:'sonia@exemple.fr',motDePasse:'motdepasse1',appareil:'apS'});
+p('connexion immédiate sans invitation', r.statut===200 && !!r.acces);
+r = await post('admin',{action:'creer',prenom:'Sonia',email:'sonia@exemple.fr',parcours:'B',motDePasse:'nouveaumdp1'},ADMIN);
+p('compte existant : mot de passe redéfini', r.statut===200 && r.existante===true);
+r = await post('session',{action:'connexion',email:'sonia@exemple.fr',motDePasse:'nouveaumdp1',appareil:'apS'});
+p('connexion avec le nouveau mot de passe', r.statut===200);
+r = await post('admin',{action:'creer',prenom:'Trop',email:'court@exemple.fr',parcours:'A',motDePasse:'abc'},ADMIN);
+p('mot de passe trop court refusé', r.statut===400 && r.erreur==='mot-de-passe-court');
+
 r = await post('admin',{action:'renvoyer-invitation',id:c.id},ADMIN);
 p('renvoi vers un compte existant', r.statut===200 && r.invitation?.deja===true);
 

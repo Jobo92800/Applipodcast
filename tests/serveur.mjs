@@ -169,6 +169,24 @@ globalThis.fetch = async (url, options = {}) => {
       journal.emails.push({ type: 'invite', email: corps.email, acces: s.access_token });
       return repondre(c);
     }
+    // Création directe avec mot de passe : le compte est utilisable aussitôt.
+    if (chemin === '/auth/v1/admin/users' && options.method === 'POST') {
+      if (parEmail.has(corps.email)) {
+        return repondre({ msg: 'A user with this email address has already been registered' }, 422);
+      }
+      const c = nouveauCompte(corps.email);
+      c.motDePasse = corps.password;
+      journal.emails.push({ type: 'creation-directe', email: corps.email });
+      return repondre(c);
+    }
+    // Redéfinition du mot de passe d'un compte existant.
+    if (chemin.startsWith('/auth/v1/admin/users/') && options.method === 'PUT') {
+      const id = chemin.split('/').pop();
+      const c = [...parEmail.values()].find((x) => x.id === id);
+      if (!c) return repondre({ msg: 'not found' }, 404);
+      c.motDePasse = corps.password;
+      return repondre(c);
+    }
     if (chemin === '/auth/v1/recover') {
       const c = parEmail.get(corps.email);
       if (c) {
